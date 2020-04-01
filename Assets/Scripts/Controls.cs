@@ -36,9 +36,7 @@ public class Controls : MonoBehaviour
 
     [Space]
     public KeyCode Esc = KeyCode.Escape;
-
     public string NPCName;
-
     private void Awake()
     {
         layerMask = 1 << LayerMask.NameToLayer("Default");
