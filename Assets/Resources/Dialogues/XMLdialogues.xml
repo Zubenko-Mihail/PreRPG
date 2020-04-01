@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document>
+  <manual>
+    n это фактически   номер реплики нпс он используется чтобы понять какие ответы могут следовать за этой репликой
+    from это номер реплики нпс к котрой привязан данный ответ
+    to это номер реплики нпс к которой приведент данный ответ
+  </manual>
+<NPC>
+  <d n="1">Ну что ж, приятель, вот ты и дома!</d>
+  <d n="2">свм пошел</d>
+  <d n="3">АВТОР ТЕКСТА КРУТОЙ ЧЕЛ</d>
+  <d n="4">есть для тебя задание</d>
+  <d n="5">пока</d>
+  <d n="6">укшигшгг</d>
+  <d n="7">ряльна</d>
+</NPC>
+<Answers>
+   
+  <d from="1" to="3">Ну!</d>
+  <d from="1" to="3">Нdу!</d>
+  <d from="1" to="3">Нgegwу!</d>
+  <d from="1" to="3">Ну!</d>
+  <d from="1" to="2">Нуwqfq!</d>
+  <d from="1" to="3">Нgfу!</d>
+  <d from="1" to="3">Нуqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq!</d>
+  <d from="1" to="3">у</d>
+  <d from="1" to="6">aaaaaaaaaaaaaaaaaaaa</d>
+  <d from="3" to="0">пошел в жопу</d>
+  <d from="3" to="1">я дома</d>
+  <d from="2" to="3">кто крутой чел?</d>
+  <d from="2" to="3">кто крутой us5u5sujgjчел?</d>
+  <d from="2" to="3">кто крутойaaaaaaaaaaaaaaaaaaaaaaa чел?</d>
+  <d from="2" to="3">кто крутойfdgdfgfg чел?</d>
+  <d from="2" to="3">кто крутgggggggой чел?</d>
+  <d from="2" to="4">как достать бабла</d>
+  <d from="4" to="5">не интересно</d>
+  <d from="4" to="6">Ладно, ты посиди здесь, а я принесу все вещи из машины</d>
+  <d from="6" to="7">альянс сосать</d>
+</Answers>
+  <Default>empty</Default>
+</document>
