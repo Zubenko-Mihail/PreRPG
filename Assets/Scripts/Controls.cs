@@ -89,7 +89,7 @@ public class Controls : MonoBehaviour
         CheckExitDia();
         Move();
 
-        oporaY.transform.position = transform.position;
+        oporaY.transform.position = transform.position + Vector3.up * 1.5f;
 
         if (Input.GetKeyDown(KeyCode.C))
         {
