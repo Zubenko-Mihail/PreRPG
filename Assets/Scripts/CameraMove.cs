@@ -5,62 +5,78 @@ using UnityEngine;
 public class CameraMove : MonoBehaviour
 {
     GameObject oporaY, cam;
-    Vector3 prevRot;
+    Vector3 prevRot, startPos;
     Quaternion startRot;
     Controls controls;
+    RaycastHit hit;
+    Ray ray;
+    float rayRange;
     private void Awake()
     {
         oporaY = GameObject.Find("OporaY");
         cam = GameObject.Find("Main Camera");
-        startRot = cam.transform.localRotation;
+        startRot = oporaY.transform.localRotation;
         controls = GetComponent<Controls>();
+        startPos = cam.transform.localPosition;
     }
-
+    private void Start()
+    {
+        rayRange = Vector3.Distance(cam.transform.position, oporaY.transform.position);
+        ray = new Ray(oporaY.transform.position, cam.transform.position - oporaY.transform.position);
+        if (Physics.Raycast(ray, out hit, rayRange))
+        {
+            cam.transform.position = hit.point - (cam.transform.position - oporaY.transform.position) * 0.2f;
+        }
+        else
+        {
+            cam.transform.localPosition = startPos;
+        }
+    }
     void FixedUpdate()
     {
         MoveCam();
-        RotateCam();
     }
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
-            cam.transform.localRotation = startRot;
             controls.canInteract = true;
         }
-
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            oporaY.transform.localRotation = startRot;
+        }
     }
     void MoveCam()
-    {
-        if (Input.GetKey(KeyCode.RightBracket))
-        {
-            oporaY.transform.Rotate(Vector3.down, 1);
-        }
-
-        if (Input.GetKey(KeyCode.LeftBracket))
-        {
-            oporaY.transform.Rotate(Vector3.up, 1);
-        }
-
-        if (cam.transform.localPosition.magnitude > 5 && Input.mouseScrollDelta.y > 0)
-            cam.transform.position += cam.transform.forward * Input.mouseScrollDelta.y;
-
-        if (cam.transform.localPosition.magnitude < 8 && Input.mouseScrollDelta.y < 0)
-            cam.transform.position += cam.transform.forward * Input.mouseScrollDelta.y;
-
-    }
-    void RotateCam()
     {
         if (Input.GetKey(KeyCode.Mouse1))
         {
             controls.canInteract = false;
-            cam.transform.Rotate(Vector3.up , Input.GetAxis("Mouse X") *  2, Space.World);
-            cam.transform.Rotate(Vector3.left , Input.GetAxis("Mouse Y") *  2, Space.Self);
-            if (cam.transform.localEulerAngles.z > 100)
+            prevRot = oporaY.transform.localEulerAngles;
+            oporaY.transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * 2, Space.World);
+            oporaY.transform.Rotate(Vector3.left, Input.GetAxis("Mouse Y") * 2, Space.Self);
+            if (oporaY.transform.localEulerAngles.z > 100)
             {
-                cam.transform.localRotation = Quaternion.Euler(prevRot);
+                oporaY.transform.localRotation = Quaternion.Euler(prevRot);
             }
-            prevRot = cam.transform.localEulerAngles;
+            ray = new Ray(oporaY.transform.position, cam.transform.position - oporaY.transform.position);
+            if (Physics.Raycast(ray, out hit, rayRange))
+            {
+                cam.transform.position = hit.point - (cam.transform.position - oporaY.transform.position) * 0.2f;
+            }
+            else
+            {
+                cam.transform.localPosition = startPos;
+            }
+        }
+        if (hit.point == Vector3.zero)
+        {
+            if (cam.transform.localPosition.magnitude > 1 && Input.mouseScrollDelta.y > 0)
+                cam.transform.position += cam.transform.forward * Input.mouseScrollDelta.y;
+            if (cam.transform.localPosition.magnitude < 8 && Input.mouseScrollDelta.y < 0)
+                cam.transform.position += cam.transform.forward * Input.mouseScrollDelta.y;
+            startPos = cam.transform.localPosition;
+            rayRange = Vector3.Distance(cam.transform.position, oporaY.transform.position);
         }
     }
 }
