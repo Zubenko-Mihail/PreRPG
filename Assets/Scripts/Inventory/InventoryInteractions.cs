@@ -18,6 +18,8 @@ public class InventoryInteractions : MonoBehaviour
     [HideInInspector]
     public GameObject InventoryPanel;
     [HideInInspector]
+    public GameObject ShopPanel;
+    [HideInInspector]
     public GameObject UI;
 
     Inventory PlayerInventory;
@@ -43,8 +45,12 @@ public class InventoryInteractions : MonoBehaviour
         UI = GameObject.Find("UI");
         DragIcon = UI.transform.Find("InvUI/DragIcon").gameObject;
         DragIcon.SetActive(false);
+
         InventoryPanel = UI.transform.Find("InvUI/PlayerInventory").gameObject;
         InventoryPanel.SetActive(false);
+        ShopPanel = UI.transform.Find("InvUI/ShopInventory").gameObject;
+        ShopPanel.SetActive(false);
+
         playerStats = GetComponent<PlayerStats>();
 
         Drop = UI.transform.Find("InvUI/PlayerInventory/Drop").gameObject.GetComponent<Drop>();
@@ -79,6 +85,16 @@ public class InventoryInteractions : MonoBehaviour
             //close
             PlayerInventory.CloseUI();
             InventoryPanel.SetActive(!InventoryPanel.activeSelf);
+            ShopPanel.SetActive(false);
+        }
+    }
+
+    public void ShowShop()
+    {
+        ShopPanel.SetActive(true);
+        if (!InventoryPanel.activeSelf)
+        {
+            ShowInventory();
         }
     }
 

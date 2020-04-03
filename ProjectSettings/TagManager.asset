@@ -12,6 +12,7 @@ TagManager:
   - SlotUI
   - Entrance
   - CraftPlace
+  - Shop
   layers:
   - Default
   - TransparentFX
