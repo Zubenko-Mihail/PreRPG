@@ -23,12 +23,19 @@ public class Inventory : MonoBehaviour
     public Slot Leggings = new Slot(null);
     public Slot Boots = new Slot(null);
 
+    [HideInInspector]
     public GameObject Slot_Weapon_1 = null;
+    [HideInInspector]
     public GameObject Slot_Weapon_2 = null;
+    [HideInInspector]
     public GameObject Slot_Helmet = null;
+    [HideInInspector]
     public GameObject Slot_Chestplate = null;
+    [HideInInspector]
     public GameObject Slot_Bracers = null;
+    [HideInInspector]
     public GameObject Slot_Leggings = null;
+    [HideInInspector]
     public GameObject Slot_Boots = null;
     #endregion
 
@@ -57,16 +64,30 @@ public class Inventory : MonoBehaviour
         SlotUI = Resources.Load<GameObject>("Slot");
         playerStats = GetComponent<PlayerStats>();
 
-
-        if (InventoryType == InventoryType.MainInventory)
+        switch (InventoryType)
         {
-            for (int i = 0; i < Capacity; i++)
-            {
-                if (InventoryArray[i].Item != null)
+            case InventoryType.MainInventory:
                 {
-                    InvWeight += InventoryArray[i].Item.weight;
+                    for (int i = 0; i < Capacity; i++)
+                    {
+                        if (InventoryArray[i].Item != null)
+                        {
+                            InvWeight += InventoryArray[i].Item.weight;
+                        }
+                    }
+                    break;
                 }
-            }
+            case InventoryType.Shop:
+                {
+                    for (int i = 0; i < Capacity; i++)
+                    {
+                        if (InventoryArray[i].Item != null)
+                        {
+                            InvWeight += InventoryArray[i].Item.weight;
+                        }
+                    }
+                    break;
+                }
         }
     }
 
@@ -108,6 +129,11 @@ public class Inventory : MonoBehaviour
                     Slot_Boots.GetComponent<SlotUI>().owner = this;
                     break;
                 }
+            case InventoryType.Shop:
+                {
+                    InventoryUI = UI.transform.Find("InvUI/ShopInventory/Field").gameObject;
+                    break;
+                }
         }
     }
 
@@ -115,79 +141,85 @@ public class Inventory : MonoBehaviour
     {
         Hide();
 
-        #region Equipment Show
-        if (Weapon_1.Item != null)
-        {
-            Slot_Weapon_1.GetComponentInChildren<Text>().text = Weapon_1.Item.name;
-            Slot_Weapon_1.GetComponent<Image>().color = Color.green;
-        }
-        else
-        {
-            Slot_Weapon_1.GetComponentInChildren<Text>().text = null;
-            Slot_Weapon_1.GetComponent<Image>().color = new Color(214, 214, 214);
-        }
-        if (Weapon_2.Item != null)
-        {
-            Slot_Weapon_2.GetComponentInChildren<Text>().text = Weapon_2.Item.name;
-            Slot_Weapon_2.GetComponent<Image>().color = Color.green;
-        }
-        else
-        {
-            Slot_Weapon_2.GetComponentInChildren<Text>().text = null;
-            Slot_Weapon_2.GetComponent<Image>().color = new Color(214, 214, 214);
-        }
-        if (Helmet.Item != null)
-        {
-            Slot_Helmet.GetComponentInChildren<Text>().text = Helmet.Item.name;
-            Slot_Helmet.GetComponent<Image>().color = Color.green;
-        }
-        else
-        {
-            Slot_Helmet.GetComponentInChildren<Text>().text = null;
-            Slot_Helmet.GetComponent<Image>().color = new Color(214, 214, 214);
-        }
-        if (Chestplate.Item != null)
-        {
-            Slot_Chestplate.GetComponentInChildren<Text>().text = Chestplate.Item.name;
-            Slot_Chestplate.GetComponent<Image>().color = Color.green;
-        }
-        else
-        {
-            Slot_Chestplate.GetComponentInChildren<Text>().text = null;
-            Slot_Chestplate.GetComponent<Image>().color = new Color(214, 214, 214);
-        }
-        if (Bracers.Item != null)
-        {
-            Slot_Bracers.GetComponentInChildren<Text>().text = Bracers.Item.name;
-            Slot_Bracers.GetComponent<Image>().color = Color.green;
-        }
-        else
-        {
-            Slot_Bracers.GetComponentInChildren<Text>().text = null;
-            Slot_Bracers.GetComponent<Image>().color = new Color(214, 214, 214);
-        }
-        if (Leggings.Item != null)
-        {
-            Slot_Leggings.GetComponentInChildren<Text>().text = Leggings.Item.name;
-            Slot_Leggings.GetComponent<Image>().color = Color.green;
-        }
-        else
-        {
-            Slot_Leggings.GetComponentInChildren<Text>().text = null;
-            Slot_Leggings.GetComponent<Image>().color = new Color(214, 214, 214);
-        }
-        if (Boots.Item != null)
-        {
-            Slot_Boots.GetComponentInChildren<Text>().text = Boots.Item.name;
-            Slot_Boots.GetComponent<Image>().color = Color.green;
-        }
-        else
-        {
-            Slot_Boots.GetComponentInChildren<Text>().text = null;
-            Slot_Boots.GetComponent<Image>().color = new Color(214, 214, 214);
-        }
+        switch (InventoryType) {
+            case InventoryType.MainInventory:
+                {
+                    #region Equipment Show
+                    if (Weapon_1.Item != null)
+                    {
+                        Slot_Weapon_1.GetComponentInChildren<Text>().text = Weapon_1.Item.name;
+                        Slot_Weapon_1.GetComponent<Image>().color = Color.green;
+                    }
+                    else
+                    {
+                        Slot_Weapon_1.GetComponentInChildren<Text>().text = null;
+                        Slot_Weapon_1.GetComponent<Image>().color = new Color(214, 214, 214);
+                    }
+                    if (Weapon_2.Item != null)
+                    {
+                        Slot_Weapon_2.GetComponentInChildren<Text>().text = Weapon_2.Item.name;
+                        Slot_Weapon_2.GetComponent<Image>().color = Color.green;
+                    }
+                    else
+                    {
+                        Slot_Weapon_2.GetComponentInChildren<Text>().text = null;
+                        Slot_Weapon_2.GetComponent<Image>().color = new Color(214, 214, 214);
+                    }
+                    if (Helmet.Item != null)
+                    {
+                        Slot_Helmet.GetComponentInChildren<Text>().text = Helmet.Item.name;
+                        Slot_Helmet.GetComponent<Image>().color = Color.green;
+                    }
+                    else
+                    {
+                        Slot_Helmet.GetComponentInChildren<Text>().text = null;
+                        Slot_Helmet.GetComponent<Image>().color = new Color(214, 214, 214);
+                    }
+                    if (Chestplate.Item != null)
+                    {
+                        Slot_Chestplate.GetComponentInChildren<Text>().text = Chestplate.Item.name;
+                        Slot_Chestplate.GetComponent<Image>().color = Color.green;
+                    }
+                    else
+                    {
+                        Slot_Chestplate.GetComponentInChildren<Text>().text = null;
+                        Slot_Chestplate.GetComponent<Image>().color = new Color(214, 214, 214);
+                    }
+                    if (Bracers.Item != null)
+                    {
+                        Slot_Bracers.GetComponentInChildren<Text>().text = Bracers.Item.name;
+                        Slot_Bracers.GetComponent<Image>().color = Color.green;
+                    }
+                    else
+                    {
+                        Slot_Bracers.GetComponentInChildren<Text>().text = null;
+                        Slot_Bracers.GetComponent<Image>().color = new Color(214, 214, 214);
+                    }
+                    if (Leggings.Item != null)
+                    {
+                        Slot_Leggings.GetComponentInChildren<Text>().text = Leggings.Item.name;
+                        Slot_Leggings.GetComponent<Image>().color = Color.green;
+                    }
+                    else
+                    {
+                        Slot_Leggings.GetComponentInChildren<Text>().text = null;
+                        Slot_Leggings.GetComponent<Image>().color = new Color(214, 214, 214);
+                    }
+                    if (Boots.Item != null)
+                    {
+                        Slot_Boots.GetComponentInChildren<Text>().text = Boots.Item.name;
+                        Slot_Boots.GetComponent<Image>().color = Color.green;
+                    }
+                    else
+                    {
+                        Slot_Boots.GetComponentInChildren<Text>().text = null;
+                        Slot_Boots.GetComponent<Image>().color = new Color(214, 214, 214);
+                    }
 
-        #endregion
+                    #endregion
+                    break;
+                }
+        }
 
         int length = InventoryArray.Count;
 
@@ -390,15 +422,6 @@ public class Inventory : MonoBehaviour
             if (InventoryArray[i].Item != null) Debug.Log(InventoryArray[i].Item.name);
             else Debug.Log("Empty");
         }
-        Debug.Log("Weapon_1");
-        if (Weapon_1.Item != null) Debug.Log(Weapon_1.Item.name);
-        else Debug.Log("Empty");
-        Debug.Log("Weapon_2");
-        if (Weapon_2.Item != null) Debug.Log(Weapon_2.Item.name);
-        else Debug.Log("Empty");
-        Debug.Log("Helmet");
-        if (Helmet.Item != null) Debug.Log(Helmet.Item.name);
-        else Debug.Log("Empty");
     }
 
     public void CloseUI()
@@ -411,7 +434,6 @@ public class Inventory : MonoBehaviour
         Slot_Leggings.GetComponent<SlotUI>().OnExit();
         Slot_Boots.GetComponent<SlotUI>().OnExit();
     }
-
 }
 
 public enum InventoryType
