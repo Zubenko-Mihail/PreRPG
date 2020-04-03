@@ -59,15 +59,16 @@ public class CameraMove : MonoBehaviour
             {
                 oporaY.transform.localRotation = Quaternion.Euler(prevRot);
             }
-            ray = new Ray(oporaY.transform.position, cam.transform.position - oporaY.transform.position);
-            if (Physics.Raycast(ray, out hit, rayRange))
-            {
-                cam.transform.position = hit.point - (cam.transform.position - oporaY.transform.position) * 0.2f;
-            }
-            else
-            {
-                cam.transform.localPosition = startPos;
-            }
+            
+        }
+        ray = new Ray(oporaY.transform.position, cam.transform.position - oporaY.transform.position);
+        if (Physics.Raycast(ray, out hit, rayRange))
+        {
+            cam.transform.position = hit.point - (cam.transform.position - oporaY.transform.position) * 0.2f;
+        }
+        else
+        {
+            cam.transform.localPosition = startPos;
         }
         if (hit.point == Vector3.zero)
         {
