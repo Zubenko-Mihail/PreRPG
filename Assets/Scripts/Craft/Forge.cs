@@ -25,7 +25,7 @@ public class Forge : MonoBehaviour
 
     public bool Craft = false;
 
-    private void Awake()
+    private void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryInteractions>();
         forge = transform;

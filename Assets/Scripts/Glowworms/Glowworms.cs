@@ -27,8 +27,8 @@ public class Glowworms : MonoBehaviour
         {
             GameObject ngw = Instantiate(Glowworm, trnsfrm) as GameObject;
             Vector3 V3 = ngw.GetComponent<Glowworm>().RandomPoint(radius);
-            ngw.transform.position = trnsfrm.position + V3;
-            ngw.GetComponent<Glowworm>().CreateWay(trnsfrm.position);
+            ngw.transform.localPosition = V3;
+            ngw.GetComponent<Glowworm>().CreateWay();
         }
     }
 }

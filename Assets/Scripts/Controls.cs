@@ -214,6 +214,7 @@ public class Controls : MonoBehaviour
                     case "Enemy":
                     case "NPC":
                     case "CraftPlace":
+                    case "Shop":
                         waitUntilInteract = StartCoroutine(WaitUntilInteract(go));
                         break;
                     default:
@@ -288,10 +289,12 @@ public class Controls : MonoBehaviour
         }
         else if (go.tag == "Shop")
         {
+            Debug.Log("S");
             if (!((transform.position - go.transform.position).magnitude - go.GetComponent<CapsuleCollider>().radius * Mathf.Max(transform.localScale.x, transform.localScale.z) < interactRange))
                 nav.SetDestination(go.transform.position);
             yield return new WaitUntil(() => (transform.position - go.transform.position).magnitude - go.GetComponent<CapsuleCollider>().radius * Mathf.Max(transform.localScale.x, transform.localScale.z) < interactRange);
             nav.ResetPath();
+            
             transform.GetComponent<InventoryInteractions>().ShowShop();
             go.GetComponent<Inventory>().Show();
         }

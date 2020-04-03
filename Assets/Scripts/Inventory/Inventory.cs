@@ -39,9 +39,9 @@ public class Inventory : MonoBehaviour
     public GameObject Slot_Boots = null;
     #endregion
 
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject InventoryUI;
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject SlotUI;
     [HideInInspector]
     public InventoryInteractions Player = null;
@@ -51,7 +51,7 @@ public class Inventory : MonoBehaviour
     public float InvWeight = 0;
     PlayerStats playerStats;
 
-    void Awake()
+    void Start()
     {
         if (Capacity > 0)
         {

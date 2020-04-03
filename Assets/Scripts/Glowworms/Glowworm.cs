@@ -33,11 +33,11 @@ public class Glowworm : MonoBehaviour
         Movement();
     }
 
-    public void CreateWay(Vector3 GlowwormsPos)
+    public void CreateWay()
     {
-        P0 = obj.position;
+        P0 = obj.localPosition;
             P1 = P0 + RandomPoint(radius);
-        P3 = GlowwormsPos + RandomPoint(radius);
+        P3 = RandomPoint(radius);
             P2 = P3 + RandomPoint(radius);
         for (float t = 0; t < 0.96f; t += 0.05f)
         {
@@ -45,7 +45,7 @@ public class Glowworm : MonoBehaviour
         }
         P0 = P3;
             P1 = P0 + RandomPoint(radius);
-        P3 = obj.position;
+        P3 = obj.localPosition;
             P2 = P3 + RandomPoint(radius);
         for (float t = 0; t < 0.96f; t += 0.05f)
         {
@@ -67,7 +67,7 @@ public class Glowworm : MonoBehaviour
     {
         if (is_way)
         {
-            obj.position = Vector3.Lerp(Way[back_point], Way[next_point], progress);
+            obj.localPosition = Vector3.Lerp(Way[back_point], Way[next_point], progress);
             progress += step;
             if (progress > 1.01f)
             {
