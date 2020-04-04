@@ -38,6 +38,7 @@ public class CameraMove : MonoBehaviour
     }
     private void Update()
     {
+        UpdateOporaPos();
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
             controls.canInteract = true;
@@ -59,25 +60,42 @@ public class CameraMove : MonoBehaviour
             {
                 oporaY.transform.localRotation = Quaternion.Euler(prevRot);
             }
-            
+            ray = new Ray(oporaY.transform.position, cam.transform.position - oporaY.transform.position);
+            if (Physics.Raycast(ray, out hit, rayRange))
+            {
+                cam.transform.position = hit.point - (hit.point - oporaY.transform.position) * 0.2f;
+            }
+            else
+            {
+                cam.transform.localPosition = startPos;
+            }
         }
-        ray = new Ray(oporaY.transform.position, cam.transform.position - oporaY.transform.position);
-        if (Physics.Raycast(ray, out hit, rayRange))
+        print(controls.isRunning);
+        if (controls.isRunning)
         {
-            cam.transform.position = hit.point - (cam.transform.position - oporaY.transform.position) * 0.2f;
-        }
-        else
-        {
-            cam.transform.localPosition = startPos;
+            ray = new Ray(oporaY.transform.position, cam.transform.position - oporaY.transform.position);
+            if (Physics.Raycast(ray, out hit, rayRange))
+            {
+                cam.transform.position = hit.point - (hit.point - oporaY.transform.position) * 0.2f;
+            }
+            else
+            {
+                cam.transform.localPosition = startPos;
+            }
         }
         if (hit.point == Vector3.zero)
         {
-            if (cam.transform.localPosition.magnitude > 1 && Input.mouseScrollDelta.y > 0)
+            print(cam.transform.localPosition.magnitude);
+            if (cam.transform.localPosition.magnitude > 3 && Input.mouseScrollDelta.y > 0)
                 cam.transform.position += cam.transform.forward * Input.mouseScrollDelta.y;
             if (cam.transform.localPosition.magnitude < 8 && Input.mouseScrollDelta.y < 0)
                 cam.transform.position += cam.transform.forward * Input.mouseScrollDelta.y;
             startPos = cam.transform.localPosition;
             rayRange = Vector3.Distance(cam.transform.position, oporaY.transform.position);
         }
+    }
+    void UpdateOporaPos()
+    {
+        oporaY.transform.position = transform.position + Vector3.up * 1.5f;
     }
 }

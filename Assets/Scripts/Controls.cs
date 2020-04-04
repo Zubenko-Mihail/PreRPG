@@ -16,7 +16,7 @@ public class Controls : MonoBehaviour
     int layerMask;
     Ray MoveRay;
     bool wasBeingHeld = false, canMove = true, canBeginMove = true, qpressed;
-    public bool canInteract = true;
+    public bool canInteract = true, isRunning = false;
     const float OneSecond = 0.2f;
     float alreadyHolding = 0f;
     DialoguesManager dialoguesManager;
@@ -26,7 +26,7 @@ public class Controls : MonoBehaviour
     public float interactRange = 4;
     Attack attackScript;
     CamSwitcher camSwitcher;
-    GameObject oporaY, miniCam, cam, MoveParticles;
+    GameObject miniCam, cam, MoveParticles;
     PlayerStats playerStats;
     public GameObject InventoryPanel;
     public GameObject UI;
@@ -52,7 +52,6 @@ public class Controls : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         UI = GameObject.Find("UI");
         miniCam = GameObject.Find("MiniCam");
-        oporaY = GameObject.Find("OporaY");
         cam = GameObject.Find("Main Camera");
         camComponent = cam.GetComponent<Camera>();
         InventoryPanel = UI.transform.Find("InvUI/PlayerInventory").gameObject;
@@ -68,9 +67,13 @@ public class Controls : MonoBehaviour
             if (nav.isOnNavMesh && nav.remainingDistance < 0.01)
                 nav.ResetPath();
             animator.SetBool("isRunning", false);
+            isRunning = false;
         }
         else
+        {
             animator.SetBool("isRunning", true);
+            isRunning = true;
+        }
         if (!EventSystem.current.IsPointerOverGameObject())
         {
             canMove = true;
@@ -88,8 +91,6 @@ public class Controls : MonoBehaviour
         Map();
         CheckExitDia();
         Move();
-
-        oporaY.transform.position = transform.position + Vector3.up * 1.5f;
 
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -156,6 +157,7 @@ public class Controls : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0) && wasBeingHeld && canInteract && canMove)
         {
             nav.ResetPath();
+            isRunning = true;
             animator.SetBool("isRunning", true);
             MoveRay = camComponent.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(MoveRay, out hit, Mathf.Infinity, layerMask))
