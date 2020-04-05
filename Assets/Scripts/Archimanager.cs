@@ -15,7 +15,7 @@ public class Archimanager : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
-        File.WriteAllText(Directory.GetParent(Application.dataPath) + "/LOG.txt", Application.consoleLogPath);
+        //File.WriteAllText(Directory.GetParent(Application.dataPath) + "/LOG.txt", Application.consoleLogPath);
     }
 
 }
