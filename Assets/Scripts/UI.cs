@@ -6,9 +6,10 @@ public class UI : MonoBehaviour
     Camera camComponent, miniCamComponent;
     static Image HPImage;
     static Image MPImage;
-    GameObject player, miniCam, miniMap;
+    GameObject player, miniCam, miniMap, help;
     private void Awake()
     {
+        help = PlayerStats.TransformSearch(transform, "HelpMenuPanel").gameObject;
         HPImage = PlayerStats.TransformSearch(transform, "HP").GetComponent<Image>();
         MPImage = PlayerStats.TransformSearch(transform, "MP").GetComponent<Image>();
         player = GameObject.FindGameObjectWithTag("Player");
@@ -28,6 +29,7 @@ public class UI : MonoBehaviour
     void Update()
     {
         MiniMap();
+        Help();
     }
     public GameObject attackTarget;
     void WatchStats()
@@ -89,6 +91,14 @@ public class UI : MonoBehaviour
         if (Input.GetButtonDown("HideMiniMap"))
         {
             miniMap.SetActive(!miniMap.activeSelf);
+        }
+    }
+
+    void Help()
+    {
+        if (Input.GetButtonDown("Help"))
+        {
+            help.SetActive(!help.activeSelf);
         }
     }
 }
