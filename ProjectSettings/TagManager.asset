@@ -10,9 +10,9 @@ TagManager:
   - NPC
   - Spell
   - SlotUI
-  - Entrance
   - CraftPlace
   - Shop
+  - Transition
   layers:
   - Default
   - TransparentFX

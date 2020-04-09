@@ -12,6 +12,7 @@ public class SceneLoader : MonoBehaviour
     static SceneLoader instance;
     static GameObject player;
     static NavMeshAgent nav;
+    public static string prevScene = "Game";
     private void Awake()
     {
         instance = this;
@@ -39,12 +40,16 @@ public class SceneLoader : MonoBehaviour
     {
         if (SceneManager.GetSceneByName(sceneName).buildIndex==-1)
         {
+            
             nav = GameObject.FindGameObjectWithTag("Player").GetComponent<NavMeshAgent>();
             nav.enabled = false;
             num = Convert.ToInt32(UnityEngine.Random.Range(1, 3)).ToString();
             Time.timeScale = 0;
             if (SceneManager.sceneCount > 1)
+            {
+                prevScene = SceneManager.GetSceneAt(1).name;
                 SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
+            }
             currentLoading = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         }
     }
@@ -69,7 +74,16 @@ public class SceneLoader : MonoBehaviour
         {
             player.SetActive(true);
             Time.timeScale = 1;
-            player.transform.position = GameObject.FindGameObjectWithTag("Entrance").transform.position;
+            GameObject[] Transitions = GameObject.FindGameObjectsWithTag("Transition");
+            foreach(GameObject go in Transitions)
+            {
+                if(go.GetComponent<LocationTransition>().ToScene.name == prevScene)
+                {
+                    player.transform.position = go.transform.position + go.transform.forward*3;
+                    break;
+                }
+            }
+            
             currentLoading = null;
             nav.enabled = true;
         }
