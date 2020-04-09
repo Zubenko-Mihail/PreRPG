@@ -45,10 +45,10 @@ public class Item
     public ItemRarity itemRarity;
     public string name;
     public GameObject prefab;
-    public string s = "sds";
     public string pathToPrefabInResources;
     public ItemType itemType;
     public GUI ItemStats;
+    public int price;
     public float weight;
 }
 

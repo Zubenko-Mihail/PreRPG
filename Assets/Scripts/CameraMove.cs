@@ -70,7 +70,7 @@ public class CameraMove : MonoBehaviour
                 cam.transform.localPosition = startPos;
             }
         }
-        print(controls.isRunning);
+        //print(controls.isRunning);
         if (controls.isRunning)
         {
             ray = new Ray(oporaY.transform.position, cam.transform.position - oporaY.transform.position);
@@ -85,7 +85,7 @@ public class CameraMove : MonoBehaviour
         }
         if (hit.point == Vector3.zero)
         {
-            print(cam.transform.localPosition.magnitude);
+            //print(cam.transform.localPosition.magnitude);
             if (cam.transform.localPosition.magnitude > 3 && Input.mouseScrollDelta.y > 0)
                 cam.transform.position += cam.transform.forward * Input.mouseScrollDelta.y;
             if (cam.transform.localPosition.magnitude < 8 && Input.mouseScrollDelta.y < 0)

@@ -7,6 +7,7 @@ public class Inventory : MonoBehaviour
 {
     public List<Slot> InventoryArray = new List<Slot>();
 
+    public int MONEY;
 
     [Space]
     [Range(1, 100)]
@@ -42,6 +43,8 @@ public class Inventory : MonoBehaviour
     //[HideInInspector]
     public GameObject InventoryUI;
     //[HideInInspector]
+    public GameObject MoneyBar;
+    //[HideInInspector]
     public GameObject SlotUI;
     [HideInInspector]
     public InventoryInteractions Player = null;
@@ -53,6 +56,8 @@ public class Inventory : MonoBehaviour
 
     void Start()
     {
+        MONEY = 10000;
+
         if (Capacity > 0)
         {
             for (int i = 0; i < Capacity; i++) InventoryArray.Add(new Slot(null));
@@ -75,6 +80,7 @@ public class Inventory : MonoBehaviour
                             InvWeight += InventoryArray[i].Item.weight;
                         }
                     }
+                    ReloadMoney();
                     break;
                 }
             case InventoryType.Shop:
@@ -99,6 +105,8 @@ public class Inventory : MonoBehaviour
             case InventoryType.MainInventory:
                 {
                     InventoryUI = UI.transform.Find("InvUI/PlayerInventory/Field").gameObject;
+
+                    MoneyBar = UI.transform.Find("Interface/Hotbar/MoneyBar/MONEY").gameObject;
 
                     Slot_Weapon_1 = UI.transform.Find("InvUI/PlayerInventory/Equipment/Weapon_1").gameObject;
                     Slot_Weapon_1.GetComponent<SlotUI>().SlotID = -1;
@@ -217,6 +225,7 @@ public class Inventory : MonoBehaviour
                     }
 
                     #endregion
+                    ReloadMoney();
                     break;
                 }
         }
@@ -252,6 +261,10 @@ public class Inventory : MonoBehaviour
     public void Hide()
     {
         foreach (Transform Child in InventoryUI.transform) Destroy(Child.gameObject);
+    }
+
+    public void ReloadMoney() {
+        MoneyBar.GetComponent<Text>().text = MONEY.ToString();
     }
 
     public bool AddItem(Item item, int count)
