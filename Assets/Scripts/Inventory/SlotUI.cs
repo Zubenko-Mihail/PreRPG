@@ -52,15 +52,29 @@ public class SlotUI : MonoBehaviour
             {
                 if (SlotCopy.Item == null)
                 {
+                    if (owner.InventoryType == InventoryType.Shop && owner.Player.DraggingInventory.InventoryType == InventoryType.MainInventory ||
+                        owner.InventoryType == InventoryType.MainInventory && owner.Player.DraggingInventory.InventoryType == InventoryType.Shop)
+                    {
+                        owner.Player.DraggingInventory.MONEY += owner.Player.DraggingSlot.Item.price;
+                        owner.MONEY -= owner.Player.DraggingSlot.Item.price;
+                    }
+
                     SlotCopy.Count = owner.Player.DraggingSlot.Count;
                     SlotCopy.Item = owner.Player.DraggingSlot.Item;
                     owner.Player.DraggingSlot.Item = null;
                     owner.Show();
-
-
                 }
                 else
                 {
+                    if (owner.InventoryType == InventoryType.Shop && owner.Player.DraggingInventory.InventoryType == InventoryType.MainInventory ||
+                        owner.InventoryType == InventoryType.MainInventory && owner.Player.DraggingInventory.InventoryType == InventoryType.Shop)
+                    {
+                        owner.Player.DraggingInventory.MONEY += owner.Player.DraggingSlot.Item.price;
+                        owner.MONEY -= owner.Player.DraggingSlot.Item.price;
+                        owner.Player.DraggingInventory.MONEY -= SlotCopy.Item.price;
+                        owner.MONEY += SlotCopy.Item.price;
+                    }
+
                     Slot draggingSlot = new Slot(owner.Player.DraggingSlot.Item);
 
                     draggingSlot.Count = owner.Player.DraggingSlot.Count;
@@ -190,10 +204,11 @@ public class SlotUI : MonoBehaviour
                         "\n" + Type + " type: " + TypeOfType + 
                         "\nRarity: " + Rarity +
                         "\nPhysical Resistance: " + ((Armor)SlotItem.Item).physRes.ToString() + 
-                        "\nMagical Resistance: " + ((Armor)SlotItem.Item).magRes.ToString();
+                        "\nMagical Resistance: " + ((Armor)SlotItem.Item).magRes.ToString() +
+                        "\nCost: " + SlotItem.Item.price;
 
                         GUI.skin.box.fontSize = 15;
-                        GUI.Box(new Rect(Input.mousePosition.x + 10, Screen.height - Input.mousePosition.y + 10, 5 * Result.Length, GUI.skin.box.fontSize + 100), Result);
+                        GUI.Box(new Rect(Input.mousePosition.x + 10, Screen.height - Input.mousePosition.y + 10, 5 * Result.Length, GUI.skin.box.fontSize + 120), Result);
 
                         break;
                     }
@@ -230,10 +245,11 @@ public class SlotUI : MonoBehaviour
                         "\nRarity: " + Rarity +
                         "\nDamage: " + ((Weapon)SlotItem.Item).minDamage.ToString() + "-" + ((Weapon)SlotItem.Item).maxDamage.ToString() +
                         "\nAttack Speed: " + ((Weapon)SlotItem.Item).attackSpeed.ToString() +
-                        "\nAttack Range: " + ((Weapon)SlotItem.Item).range.ToString();
+                        "\nAttack Range: " + ((Weapon)SlotItem.Item).range.ToString() +
+                        "\nCost: " + SlotItem.Item.price;
 
                         GUI.skin.box.fontSize = 15;
-                        GUI.Box(new Rect(Input.mousePosition.x + 10, Screen.height - Input.mousePosition.y + 10, 4 * Result.Length, GUI.skin.box.fontSize + 120), Result);
+                        GUI.Box(new Rect(Input.mousePosition.x + 10, Screen.height - Input.mousePosition.y + 10, 4 * Result.Length, GUI.skin.box.fontSize + 150), Result);
 
                         break;
                     }

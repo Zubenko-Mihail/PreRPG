@@ -97,12 +97,14 @@ public class Controls : MonoBehaviour
             Item item = null;
             int r;
             int lvl;
+            int price = 1;
             ItemRarity rarity;
             Dictionary<ItemRarity, List<List<Item>>> Weapons = ItemManager.Weapons;
             Dictionary<ItemRarity, List<List<Item>>> Armor = ItemManager.Armor;
             while (item == null)
             {
                 lvl = Random.Range(1, 3);
+                price = Random.Range(1, 1000);
                 r = Random.Range(0, 100);
                 if (r < 10) rarity = ItemRarity.Mythical;
                 else if (r < 20) rarity = ItemRarity.Legendary;
@@ -117,6 +119,7 @@ public class Controls : MonoBehaviour
             {
                 item = ItemGenerator.CreateWeapon(item);
             }
+            item.price = price;
             ItemGenerator.SpawnItem(item, transform.position);
         }
         if (Input.GetKeyDown(KeyCode.H))
