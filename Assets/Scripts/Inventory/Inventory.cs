@@ -53,8 +53,8 @@ public class Inventory : MonoBehaviour
 
     public float InvWeight = 0;
     PlayerStats playerStats;
-
-    void Start()
+    
+    void Awake()
     {
         MONEY = 10000;
 

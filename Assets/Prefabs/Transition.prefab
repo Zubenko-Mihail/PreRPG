@@ -107,3 +107,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ToScene: {fileID: 0}
+  dialogueWindow: {fileID: 4664487424712456115, guid: cbae8015bf3c4844384c25994b2b5163,
+    type: 3}
