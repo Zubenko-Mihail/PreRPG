@@ -22,6 +22,7 @@ public class SceneLoader : MonoBehaviour
         {
             LoadScene("Beggining");
         }
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
     void Update()
     {
@@ -40,7 +41,7 @@ public class SceneLoader : MonoBehaviour
     {
         if (SceneManager.GetSceneByName(sceneName).buildIndex==-1)
         {
-            
+            print("SceneLoading");
             nav = GameObject.FindGameObjectWithTag("Player").GetComponent<NavMeshAgent>();
             nav.enabled = false;
             num = Convert.ToInt32(UnityEngine.Random.Range(1, 3)).ToString();
@@ -51,14 +52,13 @@ public class SceneLoader : MonoBehaviour
                 SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
             }
             currentLoading = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            print("SceneLoaded");
         }
     }
     private void OnGUI()
     {
         if (currentLoading != null && !currentLoading.isDone)
         {
-            //works tak sebe
-            //a cho ne tak? prosto slishkom bistraya zagruzka
             GUI.skin.box.stretchHeight = true;
             GUI.skin.box.stretchWidth = true;
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), Resources.Load<Texture2D>("LoadScreens/" + num));
@@ -70,21 +70,28 @@ public class SceneLoader : MonoBehaviour
             GUI.Box(new Rect((Screen.width - Screen.width * 0.78f) / 2, Screen.height * 0.6f,
                 Screen.width * 0.78f, Screen.height * 0.06f), "LOADING " + (currentLoading.progress * 100).ToString() + "%");
         }
-        if (currentLoading != null && currentLoading.isDone)
+    }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "Managing")
         {
             player.SetActive(true);
             Time.timeScale = 1;
             GameObject[] Transitions = GameObject.FindGameObjectsWithTag("Transition");
-            foreach(GameObject go in Transitions)
+            print(Transitions.Length);
+            foreach (GameObject go in Transitions)
             {
-                if(go.GetComponent<LocationTransition>().ToScene.name == prevScene)
+                print("Name: " + go.name);
+                print(go.GetComponent<LocationTransition>());
+                print("PrevScene: " + prevScene);
+                print("nameToScene "+(go.GetComponent<LocationTransition>().ToScene==null));
+                if (go.GetComponent<LocationTransition>().ToScene == prevScene)
                 {
-                    player.transform.position = go.transform.position + go.transform.forward*3;
+                    print("Change scene");
+                    player.transform.position = go.transform.position + go.transform.forward * 3;
                     break;
                 }
             }
-            
-            currentLoading = null;
             nav.enabled = true;
         }
     }

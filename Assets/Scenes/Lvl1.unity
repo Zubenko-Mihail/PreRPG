@@ -350,7 +350,7 @@ Animator:
   m_GameObject: {fileID: 57296428}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b235179bd2a63d1468dd430670338c55, type: 3}
-  m_Controller: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
+  m_Controller: {fileID: 9100000, guid: 803a7702873b30f40a64f032f470d516, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1926,7 +1926,7 @@ Animator:
   m_GameObject: {fileID: 358659848}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b235179bd2a63d1468dd430670338c55, type: 3}
-  m_Controller: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
+  m_Controller: {fileID: 9100000, guid: 803a7702873b30f40a64f032f470d516, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3045,9 +3045,8 @@ PrefabInstance:
     - target: {fileID: 2070570425896109761, guid: a02140ae47a433548ada367aec51a78e,
         type: 3}
       propertyPath: ToScene
-      value: 
-      objectReference: {fileID: 102900000, guid: e7d507dc935f6eb489244b491cb1568c,
-        type: 3}
+      value: Beggining
+      objectReference: {fileID: 0}
     - target: {fileID: 2070570425896109762, guid: a02140ae47a433548ada367aec51a78e,
         type: 3}
       propertyPath: m_Name
@@ -3503,7 +3502,7 @@ Animator:
   m_GameObject: {fileID: 574531680}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b235179bd2a63d1468dd430670338c55, type: 3}
-  m_Controller: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
+  m_Controller: {fileID: 9100000, guid: 803a7702873b30f40a64f032f470d516, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

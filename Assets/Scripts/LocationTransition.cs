@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LocationTransition : MonoBehaviour
 {
-    public Object ToScene;
+    public string ToScene;
     [SerializeField]
     GameObject dialogueWindow;
     GameObject player;
@@ -32,12 +32,12 @@ public class LocationTransition : MonoBehaviour
         text = PlayerStats.TransformSearch(currDialogueWindow.transform, "Text").GetComponent<Text>();
         Yes.onClick.AddListener(ChangeLocation);
         No.onClick.AddListener(CloseDialogueWindow);
-        text.text = "Перейти в " + ToScene.name;
+        text.text = "Перейти в " + ToScene;
     }
     void ChangeLocation()
     {
         CloseDialogueWindow();
-        SceneLoader.LoadScene(ToScene.name);
+        SceneLoader.LoadScene(ToScene);
     }
     void CloseDialogueWindow()
     {

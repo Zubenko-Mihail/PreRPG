@@ -842,7 +842,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1.736e-42, y: 0, z: 5.93e-43, w: 2.3744e-41}
+  m_BoundingSphereOverride: {x: 0, y: -0.000000004559851, z: 5.73e-43, w: 2.17e-43}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -1204,13 +1204,12 @@ PrefabInstance:
     - target: {fileID: 2070570425896109761, guid: a02140ae47a433548ada367aec51a78e,
         type: 3}
       propertyPath: ToScene
-      value: 
-      objectReference: {fileID: 102900000, guid: e7d507dc935f6eb489244b491cb1568c,
-        type: 3}
+      value: Beggining
+      objectReference: {fileID: 0}
     - target: {fileID: 2070570425896109762, guid: a02140ae47a433548ada367aec51a78e,
         type: 3}
       propertyPath: m_Name
-      value: Transition
+      value: Transitiondfd
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a02140ae47a433548ada367aec51a78e, type: 3}
