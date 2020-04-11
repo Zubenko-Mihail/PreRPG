@@ -41,7 +41,6 @@ public class SceneLoader : MonoBehaviour
     {
         if (SceneManager.GetSceneByName(sceneName).buildIndex==-1)
         {
-            print("SceneLoading");
             nav = GameObject.FindGameObjectWithTag("Player").GetComponent<NavMeshAgent>();
             nav.enabled = false;
             num = Convert.ToInt32(UnityEngine.Random.Range(1, 3)).ToString();
@@ -52,7 +51,6 @@ public class SceneLoader : MonoBehaviour
                 SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
             }
             currentLoading = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            print("SceneLoaded");
         }
     }
     private void OnGUI()
@@ -78,16 +76,10 @@ public class SceneLoader : MonoBehaviour
             player.SetActive(true);
             Time.timeScale = 1;
             GameObject[] Transitions = GameObject.FindGameObjectsWithTag("Transition");
-            print(Transitions.Length);
             foreach (GameObject go in Transitions)
             {
-                print("Name: " + go.name);
-                print(go.GetComponent<LocationTransition>());
-                print("PrevScene: " + prevScene);
-                print("nameToScene "+(go.GetComponent<LocationTransition>().ToScene==null));
                 if (go.GetComponent<LocationTransition>().ToScene == prevScene)
                 {
-                    print("Change scene");
                     player.transform.position = go.transform.position + go.transform.forward * 3;
                     break;
                 }
