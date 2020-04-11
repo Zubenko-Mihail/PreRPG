@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    [SerializeField]
     public List<Slot> InventoryArray = new List<Slot>();
 
     public int MONEY;
@@ -40,11 +41,12 @@ public class Inventory : MonoBehaviour
     public GameObject Slot_Boots = null;
     #endregion
 
+    public GameObject UI;
     //[HideInInspector]
     public GameObject InventoryUI;
-    //[HideInInspector]
+    [HideInInspector]
     public GameObject MoneyBar;
-    //[HideInInspector]
+    [HideInInspector]
     public GameObject SlotUI;
     [HideInInspector]
     public InventoryInteractions Player = null;
@@ -67,7 +69,7 @@ public class Inventory : MonoBehaviour
 
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryInteractions>();
         SlotUI = Resources.Load<GameObject>("Slot");
-        playerStats = GetComponent<PlayerStats>();
+        
 
         switch (InventoryType)
         {
@@ -81,6 +83,7 @@ public class Inventory : MonoBehaviour
                         }
                     }
                     ReloadMoney();
+                    playerStats = GetComponent<PlayerStats>();
                     break;
                 }
             case InventoryType.Shop:
@@ -92,6 +95,40 @@ public class Inventory : MonoBehaviour
                             InvWeight += InventoryArray[i].Item.weight;
                         }
                     }
+
+                    for (int i = 0; i < 12; i++)
+                    {
+                        
+                        Item item = null;
+                        int r;
+                        int lvl;
+                        int price = 1;
+                        ItemRarity rarity;
+                        Dictionary<ItemRarity, List<List<Item>>> Weapons = ItemManager.Weapons;
+                        Dictionary<ItemRarity, List<List<Item>>> Armor = ItemManager.Armor;
+                        while (item == null)
+                        {
+                            lvl = Random.Range(1, 3);
+                            price = Random.Range(1, 1000);
+                            r = Random.Range(0, 100);
+                            if (r < 10) rarity = ItemRarity.Mythical;
+                            else if (r < 20) rarity = ItemRarity.Legendary;
+                            else if (r < 30) rarity = ItemRarity.Rare;
+                            else rarity = ItemRarity.Common;
+                            if (r % 2 == 0)
+                                item = Weapons[rarity][lvl][Random.Range(0, Weapons[rarity][lvl].Count)];
+                            else
+                                item = Armor[rarity][lvl][Random.Range(0, Armor[rarity][lvl].Count)];
+                        }
+                        if (item.itemType == ItemType.Weapon)
+                        {
+                            item = ItemGenerator.CreateWeapon(item);
+                        }
+                        item.price = price;
+                        if (AddItem(item, 1))
+                            Debug.Log(i.ToString() + ": Shop has " + item.name);
+                    }
+
                     break;
                 }
         }
@@ -99,7 +136,7 @@ public class Inventory : MonoBehaviour
 
     void InitialisationUI()
     {
-        GameObject UI = GameObject.Find("UI");
+        UI = GameObject.Find("UI");
         switch (InventoryType)
         {
             case InventoryType.MainInventory:
@@ -273,7 +310,8 @@ public class Inventory : MonoBehaviour
 
         if (item != null)
         {
-            switch (item.itemType)
+            if (InventoryType == InventoryType.MainInventory)
+                switch (item.itemType)
             {
                 case ItemType.Weapon:
                     {
@@ -366,7 +404,8 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
-        playerStats.UpdateEquipment();
+        if (InventoryType == InventoryType.MainInventory)
+            playerStats.UpdateEquipment();
         return added;
     }
 

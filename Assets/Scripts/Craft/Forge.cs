@@ -142,12 +142,14 @@ public class Forge : MonoBehaviour
         Item item = null;
         int r;
         int lvl;
+        int price = 1;
         ItemRarity rarity;
         Dictionary<ItemRarity, List<List<Item>>> Weapons = ItemManager.Weapons;
         Dictionary<ItemRarity, List<List<Item>>> Armor = ItemManager.Armor;
         while (item == null)
         {
             lvl = Random.Range(1, 3);
+            price = Random.Range(1, (int)(Mathf.Max(100, 1000 - 100 * fail + 70 * pass)));
             r = Random.Range(0, 100);
             r = r - 2 * pass;
             if (r < 0)
@@ -166,6 +168,7 @@ public class Forge : MonoBehaviour
         {
             item = ItemGenerator.CreateWeapon(item);
         }
+        item.price = price;
         ItemGenerator.SpawnItem(item, forge.position + new Vector3(0, 0, 1.5f));
         StopCraft();
     }

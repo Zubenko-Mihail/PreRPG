@@ -6,7 +6,7 @@ public class Glowworms : MonoBehaviour
 {
     Transform trnsfrm;
     public GameObject Glowworm;
-    [Range(5, 25)]
+    [Range(5, 100)]
     public int count = 5;
     SphereCollider sphere;
     public float radius;
@@ -16,7 +16,7 @@ public class Glowworms : MonoBehaviour
     {
         trnsfrm = transform;
         sphere = GetComponent<SphereCollider>();
-        radius = sphere.radius * Mathf.Max(Mathf.Max(trnsfrm.localScale.x, trnsfrm.localScale.y), trnsfrm.localScale.z);
+        radius = sphere.radius;
         Glowworm = Resources.Load<GameObject>("Prefabs/Glowworms/Glowworm");
         SpawnGlowworms(count);
     }

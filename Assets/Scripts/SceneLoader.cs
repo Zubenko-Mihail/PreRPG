@@ -12,7 +12,7 @@ public class SceneLoader : MonoBehaviour
     static SceneLoader instance;
     static GameObject player;
     static NavMeshAgent nav;
-    public static string prevScene = "Game";
+    public static string prevScene = "Beggining";
     private void Awake()
     {
         instance = this;
@@ -20,7 +20,7 @@ public class SceneLoader : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         if(SceneManager.sceneCount<2)
         {
-            LoadScene("Beggining");
+            LoadScene("Lvl1");
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
