@@ -9117,7 +9117,7 @@ GameObject:
   - component: {fileID: 1796381214}
   - component: {fileID: 1796381213}
   - component: {fileID: 1796381218}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Glowworms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
