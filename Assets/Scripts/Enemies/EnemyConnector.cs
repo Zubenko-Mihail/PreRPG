@@ -169,7 +169,8 @@ public class EnemyConnector : MonoBehaviour
     }
     void Death()
     {
-        gameObject.AddComponent<Rigidbody>();
+        if(!gameObject.GetComponent<Rigidbody>())
+            gameObject.AddComponent<Rigidbody>();
         nav.enabled = false;
         animator.enabled = false;
         gameObject.tag = "Untagged";

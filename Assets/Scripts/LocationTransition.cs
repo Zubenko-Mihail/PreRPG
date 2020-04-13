@@ -7,7 +7,7 @@ public class LocationTransition : MonoBehaviour
 {
     public string ToScene;
     [SerializeField]
-    GameObject dialogueWindow;
+    public GameObject dialogueWindow;
     GameObject player;
     GameObject currDialogueWindow;
     Button Yes, No;
