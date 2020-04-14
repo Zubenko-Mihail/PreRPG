@@ -47,6 +47,7 @@ public class SceneLoader : MonoBehaviour
             Time.timeScale = 0;
             if (SceneManager.sceneCount > 1)
             {
+                print("QQQQQQQ\t" + SceneManager.GetSceneAt(1).name);
                 prevScene = SceneManager.GetSceneAt(1).name;
                 SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
             }
@@ -76,10 +77,13 @@ public class SceneLoader : MonoBehaviour
             player.SetActive(true);
             Time.timeScale = 1;
             GameObject[] Transitions = GameObject.FindGameObjectsWithTag("Transition");
+            print("Prev " + prevScene);
             foreach (GameObject go in Transitions)
             {
+                print("To "+go.GetComponent<LocationTransition>().ToScene);
                 if (go.GetComponent<LocationTransition>().ToScene == prevScene)
                 {
+                    print("found" + prevScene);
                     player.transform.position = go.transform.position + go.transform.forward * 3;
                     break;
                 }
