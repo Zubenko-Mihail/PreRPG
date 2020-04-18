@@ -13,6 +13,7 @@ TagManager:
   - CraftPlace
   - Shop
   - Transition
+  - EnemySpawnPoint
   layers:
   - Default
   - TransparentFX

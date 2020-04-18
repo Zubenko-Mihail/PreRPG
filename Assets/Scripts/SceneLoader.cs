@@ -89,6 +89,7 @@ public class SceneLoader : MonoBehaviour
                 }
             }
             nav.enabled = true;
+            EntitySpawner.SpawnAllEnemies();
         }
     }
 }

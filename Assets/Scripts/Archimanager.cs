@@ -6,6 +6,7 @@ public class Archimanager : MonoBehaviour
     private void Awake()
     {
         ItemManager.InitializeItems();
+        EntityManager.InitializeEntities();
         GameObject.Find("Fog").GetComponent<Projector>().enabled = true;
     }
     private void Start()

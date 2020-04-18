@@ -17,13 +17,14 @@ namespace Entities
         Humanoid
     }
 }
-public abstract class Entity
+public abstract class Entity : ScriptableObject
 {
-    public string name;
+    public new string name;
     public EntityType entityType;
     public float HP = 100;
     public float maxHP = 100;
     public float speed = 7;
+    public GameObject prefab;
     public void GetDamage(Damage Damage)
     {
 
@@ -31,59 +32,46 @@ public abstract class Entity
         HP -= currDamage;
 
     }
+
 }
 
-public abstract class Enemy : Entity
+public abstract class Enemy : Entity, ISerializationCallbackReceiver
 {
     public float damage;
     public float attackRange, attackSpeed;
     public float lookRange;
-    public EnemyType enemyType;
+    [HideInInspector]public EnemyType enemyType;
     public Enemy()
     {
         entityType = EntityType.Enemy;
     }
+
+    public abstract void OnAfterDeserialize();
+    public void OnBeforeSerialize() { }
 }
 public class Dummy : Enemy
 {
-    public Dummy(string name, float damage, int HP)
+    public override void OnAfterDeserialize()
     {
         enemyType = EnemyType.Dummy;
-        base.name = name;
-        base.damage = damage;
-        base.HP = HP;
-        maxHP = HP;
-        attackRange = 2;
     }
 }
+[CreateAssetMenu(menuName = "Enemy/Turret", order = 2)]
 
-public class Turret : Enemy
+public class Turret : Enemy 
 {
-    public Turret(string name, float damage, int HP)
+    public override void OnAfterDeserialize()
     {
         enemyType = EnemyType.Turret;
-        base.name = name;
-        base.damage = damage;
-        base.HP = HP;
-        maxHP = HP;
-        attackRange = 5;
-        attackSpeed = 0.3f;
-        lookRange = 10;
     }
 }
 
+[CreateAssetMenu(menuName = "Enemy/Humanoid", order = 1)]
 public class Humanoid : Enemy
 {
-    public Humanoid(string name, float damage, int HP)
+    public override void OnAfterDeserialize()
     {
         enemyType = EnemyType.Humanoid;
-        base.name = name;
-        base.damage = damage;
-        base.HP = HP;
-        maxHP = HP;
-        attackRange = 1;
-        attackSpeed = 0.6f;
-        lookRange = 10;
     }
 }
 

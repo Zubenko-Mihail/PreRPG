@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000004, guid: 97472ede082265f488aa9bd5ee43bc70,
     type: 2}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -7989,6 +7989,7 @@ GameObject:
   - component: {fileID: 3109174894189335166}
   - component: {fileID: 3109174894189335147}
   - component: {fileID: 3109174894189335148}
+  - component: {fileID: 3109174894189335149}
   m_Layer: 2
   m_Name: ThirdPersonController
   m_TagString: Player
@@ -8020,6 +8021,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f2f62c0f35a2f643994e906f7a39e29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3109174894189335149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3109174894189335146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8e7ccdbb9455e34fb77cc527a78aff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testEnemy: {fileID: 11400000, guid: 42c04bb4ee6053545a573dcb3f051519, type: 2}
 --- !u!114 &3109174894189335152
 MonoBehaviour:
   m_ObjectHideFlags: 0
