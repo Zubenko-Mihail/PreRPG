@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: Enemy
   m_EditorClassIdentifier: Assembly-CSharp::Humanoid
-  name: ENemy
+  name: Humanoid
   entityType: 1
   HP: 100
   maxHP: 100
   speed: 7
   prefab: {fileID: 6544428384540738234, guid: bccade0af1f1da44385b0c089b273e8d, type: 3}
-  damage: 10
+  damage: 5
   attackRange: 3
   attackSpeed: 0.5
   lookRange: 10

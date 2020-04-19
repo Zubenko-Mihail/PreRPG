@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.InputSystem;
 public class UI : MonoBehaviour
 {
     Camera camComponent, miniCamComponent;
@@ -20,6 +20,8 @@ public class UI : MonoBehaviour
     }
     void Start()
     {
+        UsefulThings.inputManager.Gameplay.ChangeMinimapSize.performed += ctx => ChangeMinimapSize(ctx.ReadValue<float>());
+        UsefulThings.inputManager.Gameplay.HideMiniMap.performed += _ => HideMiniMap();
 
     }
     void OnGUI()
@@ -28,7 +30,6 @@ public class UI : MonoBehaviour
     }
     void Update()
     {
-        MiniMap();
         Help();
     }
     public GameObject attackTarget;
@@ -36,7 +37,7 @@ public class UI : MonoBehaviour
     {
         attackTarget = player.GetComponent<Attack>().target;
         RaycastHit hit;
-        if (Physics.Raycast(camComponent.ScreenPointToRay(Input.mousePosition), out hit))
+        if (Physics.Raycast(camComponent.ScreenPointToRay(UsefulThings.mouse.position.ReadValue()), out hit))
         {
             if (hit.collider.gameObject.tag == "Item" && attackTarget == null)
             {
@@ -78,27 +79,28 @@ public class UI : MonoBehaviour
     {
         HPImage.fillAmount = f;
     }
-    void MiniMap()
+    void HideMiniMap()
     {
-        if (Input.GetButtonDown("MiniMap+") && miniCamComponent.orthographicSize > 30)
-        {
-            miniCamComponent.orthographicSize -= 10;
-        }
-        if (Input.GetButtonDown("MiniMap-") && miniCamComponent.orthographicSize < 60)
-        {
-            miniCamComponent.orthographicSize += 10;
-        }
-        if (Input.GetButtonDown("HideMiniMap"))
-        {
-            miniMap.SetActive(!miniMap.activeSelf);
-        }
+        miniMap.SetActive(!miniMap.activeSelf);
     }
 
     void Help()
     {
-        if (Input.GetButtonDown("Help"))
+        if (UsefulThings.kb.f1Key.wasPressedThisFrame)
         {
             help.SetActive(!help.activeSelf);
         }
     }
+    void ChangeMinimapSize(float f)
+    {
+        if (miniCamComponent.orthographicSize > 30 && f < -0.5f)
+        {
+            miniCamComponent.orthographicSize -= 10;
+        }
+        if (miniCamComponent.orthographicSize < 60 && f > 0.5f)
+        {
+            miniCamComponent.orthographicSize += 10;
+        }
+    }
+
 }

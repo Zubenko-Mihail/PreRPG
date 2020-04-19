@@ -24,7 +24,7 @@ public class SpellCaster : MonoBehaviour
     }
     void CastSpells()
     {
-        if (Input.GetKey(KeyCode.S))
+        if (UsefulThings.kb.sKey.wasPressedThisFrame)
         {
             qpressed = false;
             wpressed = false;
@@ -33,7 +33,7 @@ public class SpellCaster : MonoBehaviour
             Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
         }
         #region q
-        if (Input.GetKeyDown(KeyCode.Q) && qpassed >= qCD)
+        if (UsefulThings.kb.qKey.wasPressedThisFrame && qpassed >= qCD)
         {
             wpressed = false;
             epressed = false;
@@ -43,7 +43,7 @@ public class SpellCaster : MonoBehaviour
         }
         if (qpressed)
         {
-            Ray ray = camComponent.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camComponent.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
             Vector3 targ = transform.position;
             if (Physics.Raycast(ray, out hit, 100, ~(1 << LayerMask.NameToLayer("SpellRaycastIgnore")), QueryTriggerInteraction.Ignore))
             {
@@ -54,12 +54,12 @@ public class SpellCaster : MonoBehaviour
             LR.SetPosition(1, targ);
             Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorTarg"), new Vector2(50, 50), CursorMode.Auto);
         }
-        if (qpressed && Input.GetKeyDown(KeyCode.Mouse1))
+        if (qpressed && UsefulThings.mouse.rightButton.wasPressedThisFrame)
         {
             qpressed = !qpressed;
             LR.enabled = false;
             Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
-            Ray ray = camComponent.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camComponent.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
             Vector3 targ = transform.position;
             if (Physics.Raycast(ray, out hit))
             {
@@ -72,7 +72,7 @@ public class SpellCaster : MonoBehaviour
         qpassed += Time.deltaTime;
         #endregion
         #region w
-        if (Input.GetKeyDown(KeyCode.W) && wpassed >= wCD)
+        if (UsefulThings.kb.wKey.wasPressedThisFrame && wpassed >= wCD)
         {
             qpressed = false;
             epressed = false;
@@ -83,7 +83,7 @@ public class SpellCaster : MonoBehaviour
         if (wpressed)
         {
             Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorTarg"), new Vector2(50, 50), CursorMode.Auto);
-            Ray ray = camComponent.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camComponent.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
             if (Physics.Raycast(ray, out hit))
             {
                 if (hit.collider.gameObject.tag == "Enemy" && hit.collider.gameObject.GetComponent<Renderer>().enabled == true)
@@ -93,7 +93,7 @@ public class SpellCaster : MonoBehaviour
                 }
             }
         }
-        if (wpressed && Input.GetKeyDown(KeyCode.Mouse1) && hasTarget && targGO.GetComponent<Renderer>().enabled == true)
+        if (wpressed && UsefulThings.mouse.rightButton.wasPressedThisFrame && hasTarget && targGO.GetComponent<Renderer>().enabled == true)
         {
             wpressed = !wpressed;
             Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
@@ -106,7 +106,7 @@ public class SpellCaster : MonoBehaviour
 
         #endregion
         #region e
-        if (Input.GetKeyDown(KeyCode.E) && epassed >= eCD)
+        if (UsefulThings.kb.eKey.wasPressedThisFrame && epassed >= eCD)
         {
             wpressed = false;
             qpressed = false;
@@ -116,7 +116,7 @@ public class SpellCaster : MonoBehaviour
         }
         if (epressed)
         {
-            Ray ray = camComponent.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camComponent.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
             Vector3 targ = transform.position;
             if (Physics.Raycast(ray, out hit, 100, ~(1 << LayerMask.NameToLayer("SpellRaycastIgnore")), QueryTriggerInteraction.Ignore))
             {
@@ -127,12 +127,12 @@ public class SpellCaster : MonoBehaviour
             LR.SetPosition(1, targ);
             Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorTarg"), new Vector2(50, 50), CursorMode.Auto);
         }
-        if (epressed && Input.GetKeyDown(KeyCode.Mouse1))
+        if (epressed && UsefulThings.mouse.rightButton.wasPressedThisFrame)
         {
             epressed = !epressed;
             LR.enabled = false;
             Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
-            Ray ray = camComponent.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camComponent.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
             Vector3 targ = transform.position;
             if (Physics.Raycast(ray, out hit))
             {

@@ -20,7 +20,7 @@ public class OutlineController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = camera.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
         if (Physics.Raycast(ray, out hit))
         {
             prev = hit.collider.gameObject;

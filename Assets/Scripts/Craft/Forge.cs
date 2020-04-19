@@ -41,7 +41,7 @@ public class Forge : MonoBehaviour
         //{
         //   StartCraft();
         //}
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (UsefulThings.kb.escapeKey.wasPressedThisFrame)
         {
             StopCraft();
         }
@@ -69,13 +69,13 @@ public class Forge : MonoBehaviour
                         BTPBox.GetComponentInChildren<Text>().text = "[M]"; break;
                 }
             }
-            if (Input.anyKeyDown)
+            if (UsefulThings.kb.anyKey.wasPressedThisFrame)
             {
                 Debug.Log(QTEGen);
                 switch (QTEGen)
                 {
                     case 1:
-                        if (Input.GetKeyDown(KeyCode.B))
+                        if (UsefulThings.kb.bKey.wasPressedThisFrame)
                         {
                             CorrectKey = 1;
                             StartCoroutine(KeyPressing());
@@ -87,7 +87,7 @@ public class Forge : MonoBehaviour
                         }
                         break;
                     case 2:
-                        if (Input.GetKeyDown(KeyCode.N))
+                        if (UsefulThings.kb.nKey.wasPressedThisFrame)
                         {
                             CorrectKey = 1;
                             StartCoroutine(KeyPressing());
@@ -99,7 +99,7 @@ public class Forge : MonoBehaviour
                         }
                         break;
                     case 3:
-                        if (Input.GetKeyDown(KeyCode.M))
+                        if (UsefulThings.kb.mKey.wasPressedThisFrame)
                         {
                             CorrectKey = 1;
                             StartCoroutine(KeyPressing());

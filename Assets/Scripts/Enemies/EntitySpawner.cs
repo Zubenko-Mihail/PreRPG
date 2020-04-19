@@ -29,7 +29,7 @@ public class EntitySpawner : MonoBehaviour
             randInt = Random.Range(0, 100);
             if(randInt < 60)
             {
-                for(int c = 0; c < Random.Range(3, 6); c++)
+                for(int c = 1; c <= Random.Range(3, 7); c++)
                 {
                     SpawnEnemy(_testEnemy, enemySpawnPoints[i].transform.position + enemySpawnPoints[i].transform.forward / c);
                 }
