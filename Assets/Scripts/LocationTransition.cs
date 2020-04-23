@@ -27,9 +27,9 @@ public class LocationTransition : MonoBehaviour
     {
         Time.timeScale = 0;
         currDialogueWindow = Instantiate(dialogueWindow, GameObject.Find("UI").transform, false);
-        Yes = PlayerStats.TransformSearch(currDialogueWindow.transform, "ButtonYes").GetComponent<Button>();
-        No = PlayerStats.TransformSearch(currDialogueWindow.transform, "ButtonNo").GetComponent<Button>();
-        text = PlayerStats.TransformSearch(currDialogueWindow.transform, "Text").GetComponent<Text>();
+        Yes = UsefulThings.TransformSearch(currDialogueWindow.transform, "ButtonYes").GetComponent<Button>();
+        No = UsefulThings.TransformSearch(currDialogueWindow.transform, "ButtonNo").GetComponent<Button>();
+        text = UsefulThings.TransformSearch(currDialogueWindow.transform, "Text").GetComponent<Text>();
         Yes.onClick.AddListener(ChangeLocation);
         No.onClick.AddListener(CloseDialogueWindow);
         text.text = "Перейти в " + ToScene;

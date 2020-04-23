@@ -51,8 +51,8 @@ public class CameraMove : MonoBehaviour
         {
             controls.canInteract = false;
             prevRot = oporaY.transform.localEulerAngles;
-            oporaY.transform.Rotate(Vector3.up, UsefulThings.mouse.delta.ReadValue().x * 2, Space.World); ;
-            oporaY.transform.Rotate(Vector3.left, UsefulThings.mouse.delta.ReadValue().y * 2, Space.Self);
+            oporaY.transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * 2, Space.World); ;
+            oporaY.transform.Rotate(Vector3.left, Input.GetAxis("Mouse Y") * 2, Space.Self);
             if (oporaY.transform.localEulerAngles.z > 100)
             {
                 oporaY.transform.localRotation = Quaternion.Euler(prevRot);

@@ -57,20 +57,25 @@ public class @InputManager : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Mouse"",
+                    ""type"": ""Value"",
+                    ""id"": ""dd375973-4b4b-4378-8d55-2f92c26a4b87"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Esc"",
+                    ""type"": ""Button"",
+                    ""id"": ""cd5a2da2-ab7c-4242-807a-d8236f249f81"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""07e077a1-8221-4734-8f76-b97f1d76c25e"",
-                    ""path"": ""<Keyboard>/c"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""CreateItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""09c951ae-7f02-46c7-a5c9-60fc3ee05c2b"",
@@ -169,6 +174,39 @@ public class @InputManager : IInputActionCollection, IDisposable
                     ""action"": ""HideMiniMap"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6cf9614d-b9f3-47e2-8123-716e2c80fc6f"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07e077a1-8221-4734-8f76-b97f1d76c25e"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CreateItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a2f5f70a-8ae5-4939-b15f-51141b947f6d"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Esc"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -247,6 +285,8 @@ public class @InputManager : IInputActionCollection, IDisposable
         m_Gameplay_SetDefaultCamPosition = m_Gameplay.FindAction("SetDefaultCamPosition", throwIfNotFound: true);
         m_Gameplay_ChangeMinimapSize = m_Gameplay.FindAction("ChangeMinimapSize", throwIfNotFound: true);
         m_Gameplay_HideMiniMap = m_Gameplay.FindAction("HideMiniMap", throwIfNotFound: true);
+        m_Gameplay_Mouse = m_Gameplay.FindAction("Mouse", throwIfNotFound: true);
+        m_Gameplay_Esc = m_Gameplay.FindAction("Esc", throwIfNotFound: true);
         // Spells
         m_Spells = asset.FindActionMap("Spells", throwIfNotFound: true);
         m_Spells_CastFirstSpell = m_Spells.FindAction("CastFirstSpell", throwIfNotFound: true);
@@ -306,6 +346,8 @@ public class @InputManager : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_SetDefaultCamPosition;
     private readonly InputAction m_Gameplay_ChangeMinimapSize;
     private readonly InputAction m_Gameplay_HideMiniMap;
+    private readonly InputAction m_Gameplay_Mouse;
+    private readonly InputAction m_Gameplay_Esc;
     public struct GameplayActions
     {
         private @InputManager m_Wrapper;
@@ -315,6 +357,8 @@ public class @InputManager : IInputActionCollection, IDisposable
         public InputAction @SetDefaultCamPosition => m_Wrapper.m_Gameplay_SetDefaultCamPosition;
         public InputAction @ChangeMinimapSize => m_Wrapper.m_Gameplay_ChangeMinimapSize;
         public InputAction @HideMiniMap => m_Wrapper.m_Gameplay_HideMiniMap;
+        public InputAction @Mouse => m_Wrapper.m_Gameplay_Mouse;
+        public InputAction @Esc => m_Wrapper.m_Gameplay_Esc;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -339,6 +383,12 @@ public class @InputManager : IInputActionCollection, IDisposable
                 @HideMiniMap.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHideMiniMap;
                 @HideMiniMap.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHideMiniMap;
                 @HideMiniMap.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHideMiniMap;
+                @Mouse.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouse;
+                @Mouse.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouse;
+                @Mouse.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouse;
+                @Esc.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEsc;
+                @Esc.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEsc;
+                @Esc.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEsc;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -358,6 +408,12 @@ public class @InputManager : IInputActionCollection, IDisposable
                 @HideMiniMap.started += instance.OnHideMiniMap;
                 @HideMiniMap.performed += instance.OnHideMiniMap;
                 @HideMiniMap.canceled += instance.OnHideMiniMap;
+                @Mouse.started += instance.OnMouse;
+                @Mouse.performed += instance.OnMouse;
+                @Mouse.canceled += instance.OnMouse;
+                @Esc.started += instance.OnEsc;
+                @Esc.performed += instance.OnEsc;
+                @Esc.canceled += instance.OnEsc;
             }
         }
     }
@@ -418,6 +474,8 @@ public class @InputManager : IInputActionCollection, IDisposable
         void OnSetDefaultCamPosition(InputAction.CallbackContext context);
         void OnChangeMinimapSize(InputAction.CallbackContext context);
         void OnHideMiniMap(InputAction.CallbackContext context);
+        void OnMouse(InputAction.CallbackContext context);
+        void OnEsc(InputAction.CallbackContext context);
     }
     public interface ISpellsActions
     {

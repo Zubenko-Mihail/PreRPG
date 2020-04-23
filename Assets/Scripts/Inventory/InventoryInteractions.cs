@@ -84,7 +84,6 @@ public class InventoryInteractions : MonoBehaviour
         if (!InventoryPanel.activeSelf)
         {
             //open
-            print("OPEN");
             InventoryPanel.SetActive(!InventoryPanel.activeSelf);
             PlayerInventory.Show();
         }
@@ -126,7 +125,6 @@ public class InventoryInteractions : MonoBehaviour
 
     public void StopDrag()
     {
-        print("stop");
         IsDragging = false;
         Controls.IsDragging = false;
         DraggingSlot = null;

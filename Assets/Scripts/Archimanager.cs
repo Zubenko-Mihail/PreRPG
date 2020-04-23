@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class Archimanager : MonoBehaviour
 {
+    
     private void Awake()
     {
         UsefulThings.inputManager = new InputManager();

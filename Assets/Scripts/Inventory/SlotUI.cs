@@ -25,8 +25,6 @@ public class SlotUI : MonoBehaviour
             default: SlotCopy = owner.InventoryArray[SlotID]; break;
         }
 
-        Debug.Log(SlotID);
-        Debug.Log(owner.chosenSlot);
 
         if (owner.Player.IsDragging)
         {

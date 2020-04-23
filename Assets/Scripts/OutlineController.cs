@@ -5,7 +5,7 @@ using UnityEngine;
 public class OutlineController : MonoBehaviour
 {
     RaycastHit hit;
-    Camera camera;
+    new Camera camera;
     public GameObject prev;
     Dictionary<string, Color> colors = new Dictionary<string, Color>();
     Attack attack;

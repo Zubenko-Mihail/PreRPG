@@ -9,9 +9,9 @@ public class UI : MonoBehaviour
     GameObject player, miniCam, miniMap, help;
     private void Awake()
     {
-        help = PlayerStats.TransformSearch(transform, "HelpMenuPanel").gameObject;
-        HPImage = PlayerStats.TransformSearch(transform, "HP").GetComponent<Image>();
-        MPImage = PlayerStats.TransformSearch(transform, "MP").GetComponent<Image>();
+        help = UsefulThings.TransformSearch(transform, "HelpMenuPanel").gameObject;
+        HPImage = UsefulThings.TransformSearch(transform, "HP").GetComponent<Image>();
+        MPImage = UsefulThings.TransformSearch(transform, "MP").GetComponent<Image>();
         player = GameObject.FindGameObjectWithTag("Player");
         camComponent = player.GetComponent<Controls>().camComponent;
         miniCam = GameObject.Find("MiniCam");
