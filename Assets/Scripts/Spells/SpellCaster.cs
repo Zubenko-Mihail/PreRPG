@@ -17,31 +17,23 @@ public class SpellCaster : MonoBehaviour
         camComponent = GameObject.Find("Main Camera").GetComponent<Camera>();
         LR = GameObject.Find("Main Camera").GetComponent<LineRenderer>();
     }
+    private void Start()
+    {
+        UsefulThings.inputManager.Spells.CastFirstSpell.performed += _ => CastFirstSpell();
+        UsefulThings.inputManager.Spells.CastSecondSpell.performed += _ => CastSecondSpell();
+        UsefulThings.inputManager.Spells.CastThirdSpell.performed += _ => CastThirdSpell();
+        UsefulThings.inputManager.Spells.RightMouseButton.performed += _ => RightMouseButtonPressed();
+    }
 
     void Update()
     {
-        CastSpells(); 
-    }
-    void CastSpells()
-    {
-        if (UsefulThings.kb.sKey.wasPressedThisFrame)
-        {
-            qpressed = false;
-            wpressed = false;
-            epressed = false;
-            LR.enabled = false;
-            Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
-        }
-        #region q
-        if (UsefulThings.kb.qKey.wasPressedThisFrame && qpassed >= qCD)
-        {
-            wpressed = false;
-            epressed = false;
-            qpressed = !qpressed;
-            LR.enabled = !LR.enabled;
-            Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
-        }
-        if (qpressed)
+        if(qpassed < qCD)
+            qpassed += Time.deltaTime;
+        if(wpassed < wCD)
+            wpassed += Time.deltaTime;
+        if(epassed < eCD)
+            epassed += Time.deltaTime;
+        if (qpressed||epressed)
         {
             Ray ray = camComponent.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
             Vector3 targ = transform.position;
@@ -53,32 +45,6 @@ public class SpellCaster : MonoBehaviour
             LR.SetPosition(0, transform.position);
             LR.SetPosition(1, targ);
             Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorTarg"), new Vector2(50, 50), CursorMode.Auto);
-        }
-        if (qpressed && UsefulThings.mouse.rightButton.wasPressedThisFrame)
-        {
-            qpressed = !qpressed;
-            LR.enabled = false;
-            Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
-            Ray ray = camComponent.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
-            Vector3 targ = transform.position;
-            if (Physics.Raycast(ray, out hit))
-            {
-                targ = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-            }
-            Spell spell = SpellGenerator.CreateSpell("aaa", Random.Range(15, 20), 16, SpellType.PointTargetSpell, "Prefabs/PTS");
-            SpellGenerator.SpawnSpell(spell, transform.position, transform.rotation, targ);
-            qpassed = 0;
-        }
-        qpassed += Time.deltaTime;
-        #endregion
-        #region w
-        if (UsefulThings.kb.wKey.wasPressedThisFrame && wpassed >= wCD)
-        {
-            qpressed = false;
-            epressed = false;
-            LR.enabled = false;
-            wpressed = !wpressed;
-            Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
         }
         if (wpressed)
         {
@@ -93,20 +59,32 @@ public class SpellCaster : MonoBehaviour
                 }
             }
         }
-        if (wpressed && UsefulThings.mouse.rightButton.wasPressedThisFrame && hasTarget && targGO.GetComponent<Renderer>().enabled == true)
+    }
+    void CastFirstSpell()
+    {
+        if (qpassed >= qCD)
         {
+            wpressed = false;
+            epressed = false;
+            qpressed = !qpressed;
+            LR.enabled = !LR.enabled;
+            Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
+        } 
+    }
+    void CastSecondSpell()
+    {
+        if (wpassed >= wCD)
+        {
+            qpressed = false;
+            epressed = false;
+            LR.enabled = false;
             wpressed = !wpressed;
             Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
-            Spell spell = SpellGenerator.CreateSpell("aaa", Random.Range(15, 20), 16, SpellType.EnemyTargetSpell, "Prefabs/ETS");
-            SpellGenerator.SpawnSpell(spell, transform.position, transform.rotation, targGO);
-            hasTarget = false;
-            wpassed = 0;
         }
-        wpassed += Time.deltaTime;
-
-        #endregion
-        #region e
-        if (UsefulThings.kb.eKey.wasPressedThisFrame && epassed >= eCD)
+    }
+    void CastThirdSpell()
+    {
+        if (epassed >= eCD)
         {
             wpressed = false;
             qpressed = false;
@@ -114,20 +92,25 @@ public class SpellCaster : MonoBehaviour
             LR.enabled = !LR.enabled;
             Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
         }
-        if (epressed)
+    }
+    void RightMouseButtonPressed()
+    {
+        if (qpressed)
         {
+            qpressed = !qpressed;
+            LR.enabled = false;
+            Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
             Ray ray = camComponent.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
             Vector3 targ = transform.position;
-            if (Physics.Raycast(ray, out hit, 100, ~(1 << LayerMask.NameToLayer("SpellRaycastIgnore")), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(ray, out hit))
             {
                 targ = new Vector3(hit.point.x, transform.position.y, hit.point.z);
             }
-            LR.enabled = true;
-            LR.SetPosition(0, transform.position);
-            LR.SetPosition(1, targ);
-            Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorTarg"), new Vector2(50, 50), CursorMode.Auto);
+            Spell spell = SpellGenerator.CreateSpell("aaa", Random.Range(15, 20), 16, SpellType.PointTargetSpell, "Prefabs/PTS");
+            SpellGenerator.SpawnSpell(spell, transform.position, transform.rotation, targ);
+            qpassed = 0;
         }
-        if (epressed && UsefulThings.mouse.rightButton.wasPressedThisFrame)
+        if (epressed)
         {
             epressed = !epressed;
             LR.enabled = false;
@@ -141,9 +124,16 @@ public class SpellCaster : MonoBehaviour
             Spell spell = SpellGenerator.CreateSpell("aaa", Random.Range(15, 150), 16, SpellType.AreaOfEffectSpell, "Prefabs/PTS", 5f);
             SpellGenerator.SpawnSpell(spell, transform.position, transform.rotation, targ, 5f);
             epassed = 0;
-
         }
-        epassed += Time.deltaTime;
-        #endregion
+        if (wpressed && hasTarget && targGO.GetComponent<Renderer>().enabled == true)
+        {
+            wpressed = !wpressed;
+            Cursor.SetCursor(Resources.Load<Texture2D>("Cursors/CursorDef"), Vector2.zero, CursorMode.Auto);
+            Spell spell = SpellGenerator.CreateSpell("aaa", Random.Range(15, 20), 16, SpellType.EnemyTargetSpell, "Prefabs/ETS");
+            SpellGenerator.SpawnSpell(spell, transform.position, transform.rotation, targGO);
+            hasTarget = false;
+            wpassed = 0;
+        }
+
     }
 }

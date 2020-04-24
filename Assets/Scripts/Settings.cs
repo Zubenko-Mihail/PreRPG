@@ -19,7 +19,10 @@ public class Settings : MonoBehaviour
     {
         UsefulThings.inputManager.Gameplay.Esc.performed += _ => gameObject.SetActive(false);
         Bindings.Add("OpenInventory", UsefulThings.inputManager.Gameplay.OpenInventory);
-        Bindings.Add("SetDefaultCamPosition", UsefulThings.inputManager.Gameplay.OpenInventory);
+        Bindings.Add("SetDefaultCamPosition", UsefulThings.inputManager.Gameplay.SetDefaultCamPosition);
+        Bindings.Add("CastFirstSpell", UsefulThings.inputManager.Spells.CastFirstSpell);
+        Bindings.Add("CastSecondSpell", UsefulThings.inputManager.Spells.CastSecondSpell);
+        Bindings.Add("CastThirdSpell", UsefulThings.inputManager.Spells.CastThirdSpell);
     }
     private void Update()
     {
@@ -42,13 +45,13 @@ public class Settings : MonoBehaviour
                     .OnMatchWaitForAnother(0.1f)
                     .Start();
         rebindOperation.OnComplete(OnComplete);
-        UsefulThings.inputManager.Enable();
     }
     void OnComplete(InputActionRebindingExtensions.RebindingOperation rebindingOperation)
     {
         Text text = currButton.transform.GetComponentInChildren<Text>();
         string s = rebindingOperation.action.bindings[0].effectivePath;
         text.text = text.gameObject.transform.parent.name + " " + s.Substring(11, s.Length - 11);
+        UsefulThings.inputManager.Enable();
         print("comleted");
     }
 }

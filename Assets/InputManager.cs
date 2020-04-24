@@ -237,6 +237,14 @@ public class @InputManager : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""RightMouseButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""f6882440-b688-4a55-849a-10c86a5d70ab"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -272,6 +280,17 @@ public class @InputManager : IInputActionCollection, IDisposable
                     ""action"": ""CastThirdSpell"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ec09d21-dbc7-4bfd-bf76-ed1289bc6d2c"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightMouseButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -292,6 +311,7 @@ public class @InputManager : IInputActionCollection, IDisposable
         m_Spells_CastFirstSpell = m_Spells.FindAction("CastFirstSpell", throwIfNotFound: true);
         m_Spells_CastSecondSpell = m_Spells.FindAction("CastSecondSpell", throwIfNotFound: true);
         m_Spells_CastThirdSpell = m_Spells.FindAction("CastThirdSpell", throwIfNotFound: true);
+        m_Spells_RightMouseButton = m_Spells.FindAction("RightMouseButton", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -425,6 +445,7 @@ public class @InputManager : IInputActionCollection, IDisposable
     private readonly InputAction m_Spells_CastFirstSpell;
     private readonly InputAction m_Spells_CastSecondSpell;
     private readonly InputAction m_Spells_CastThirdSpell;
+    private readonly InputAction m_Spells_RightMouseButton;
     public struct SpellsActions
     {
         private @InputManager m_Wrapper;
@@ -432,6 +453,7 @@ public class @InputManager : IInputActionCollection, IDisposable
         public InputAction @CastFirstSpell => m_Wrapper.m_Spells_CastFirstSpell;
         public InputAction @CastSecondSpell => m_Wrapper.m_Spells_CastSecondSpell;
         public InputAction @CastThirdSpell => m_Wrapper.m_Spells_CastThirdSpell;
+        public InputAction @RightMouseButton => m_Wrapper.m_Spells_RightMouseButton;
         public InputActionMap Get() { return m_Wrapper.m_Spells; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -450,6 +472,9 @@ public class @InputManager : IInputActionCollection, IDisposable
                 @CastThirdSpell.started -= m_Wrapper.m_SpellsActionsCallbackInterface.OnCastThirdSpell;
                 @CastThirdSpell.performed -= m_Wrapper.m_SpellsActionsCallbackInterface.OnCastThirdSpell;
                 @CastThirdSpell.canceled -= m_Wrapper.m_SpellsActionsCallbackInterface.OnCastThirdSpell;
+                @RightMouseButton.started -= m_Wrapper.m_SpellsActionsCallbackInterface.OnRightMouseButton;
+                @RightMouseButton.performed -= m_Wrapper.m_SpellsActionsCallbackInterface.OnRightMouseButton;
+                @RightMouseButton.canceled -= m_Wrapper.m_SpellsActionsCallbackInterface.OnRightMouseButton;
             }
             m_Wrapper.m_SpellsActionsCallbackInterface = instance;
             if (instance != null)
@@ -463,6 +488,9 @@ public class @InputManager : IInputActionCollection, IDisposable
                 @CastThirdSpell.started += instance.OnCastThirdSpell;
                 @CastThirdSpell.performed += instance.OnCastThirdSpell;
                 @CastThirdSpell.canceled += instance.OnCastThirdSpell;
+                @RightMouseButton.started += instance.OnRightMouseButton;
+                @RightMouseButton.performed += instance.OnRightMouseButton;
+                @RightMouseButton.canceled += instance.OnRightMouseButton;
             }
         }
     }
@@ -482,5 +510,6 @@ public class @InputManager : IInputActionCollection, IDisposable
         void OnCastFirstSpell(InputAction.CallbackContext context);
         void OnCastSecondSpell(InputAction.CallbackContext context);
         void OnCastThirdSpell(InputAction.CallbackContext context);
+        void OnRightMouseButton(InputAction.CallbackContext context);
     }
 }
