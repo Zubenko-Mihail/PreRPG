@@ -64,7 +64,10 @@ public class Controls : MonoBehaviour
         kb = UsefulThings.kb;
         mouse = UsefulThings.mouse;
     }
-
+    private void Start()
+    {
+        UsefulThings.inputManager.Gameplay.CreateItem.performed += _ => SpawnRandomItem();
+    }
     void Update()
     {
         if (nav.velocity.magnitude <= 0.5f)
@@ -92,46 +95,21 @@ public class Controls : MonoBehaviour
         }
 
         Interact();
-        Map();
         CheckExitDia();
         Move();
-
-        if (kb.cKey.isPressed)//GetKeyDown(KeyCode.C))
+        if (kb.escapeKey.wasPressedThisFrame)
         {
-            Item item = null;
-            int r;
-            int lvl;
-            int price = 1;
-            ItemRarity rarity;
-            Dictionary<ItemRarity, List<List<Item>>> Weapons = ItemManager.Weapons;
-            Dictionary<ItemRarity, List<List<Item>>> Armor = ItemManager.Armor;
-            while (item == null)
+            GameObject SettingsMenu = UsefulThings.TransformSearch(UI.transform, "SettingsMenu").gameObject;
+            SettingsMenu.SetActive(!SettingsMenu.activeSelf);
+            if (SettingsMenu.activeSelf)
             {
-                lvl = Random.Range(1, 3);
-                price = Random.Range(1, 1000);
-                r = Random.Range(0, 100);
-                if (r < 10) rarity = ItemRarity.Mythical;
-                else if (r < 20) rarity = ItemRarity.Legendary;
-                else if (r < 30) rarity = ItemRarity.Rare;
-                else rarity = ItemRarity.Common;
-                if (r % 2 == 0)
-                    item = Weapons[rarity][lvl][Random.Range(0, Weapons[rarity][lvl].Count)];
-                else
-                    item = Armor[rarity][lvl][Random.Range(0, Armor[rarity][lvl].Count)];
+                Time.timeScale = 0;
             }
-            if (item.itemType == ItemType.Weapon)
+            else
             {
-                item = ItemGenerator.CreateWeapon(item);
+                Time.timeScale = 1;
             }
-            item.price = price;
-            ItemGenerator.SpawnItem(item, transform.position);
         }
-        if (kb.hKey.wasPressedThisFrame)
-            playerStats.GetDamage(new Damage(10));
-        if (kb.vKey.wasPressedThisFrame)
-            SaveManager.SaveGame();
-        if (kb.lKey.wasPressedThisFrame)
-            SaveManager.LoadGame();
     }
 
     private void LateUpdate()
@@ -182,16 +160,9 @@ public class Controls : MonoBehaviour
     {
         Instantiate(MoveParticles, targetMove + Vector3.up * 1.5f, Quaternion.identity);
     }
-
-
-
     void MoveMiniCam()
     {
         miniCam.transform.position = transform.position + Vector3.up * 100;
-
-    }
-    void Map()
-    {
 
     }
 
@@ -332,5 +303,36 @@ public class Controls : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookTargetVector3 - transform.position), 10);
             yield return new WaitForFixedUpdate();
         }
+    }
+
+    void SpawnRandomItem()
+    {
+        Item item = null;
+        int r;
+        int lvl;
+        int price = 1;
+        ItemRarity rarity;
+        Dictionary<ItemRarity, List<List<Item>>> Weapons = ItemManager.Weapons;
+        Dictionary<ItemRarity, List<List<Item>>> Armor = ItemManager.Armor;
+        while (item == null)
+        {
+            lvl = Random.Range(1, 3);
+            price = Random.Range(1, 1000);
+            r = Random.Range(0, 100);
+            if (r < 10) rarity = ItemRarity.Mythical;
+            else if (r < 20) rarity = ItemRarity.Legendary;
+            else if (r < 30) rarity = ItemRarity.Rare;
+            else rarity = ItemRarity.Common;
+            if (r % 2 == 0)
+                item = Weapons[rarity][lvl][Random.Range(0, Weapons[rarity][lvl].Count)];
+            else
+                item = Armor[rarity][lvl][Random.Range(0, Armor[rarity][lvl].Count)];
+        }
+        if (item.itemType == ItemType.Weapon)
+        {
+            item = ItemGenerator.CreateWeapon(item);
+        }
+        item.price = price;
+        ItemGenerator.SpawnItem(item, transform.position);
     }
 }

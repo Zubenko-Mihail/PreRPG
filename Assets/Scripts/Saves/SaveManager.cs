@@ -22,7 +22,11 @@ public class SaveManager : MonoBehaviour
         inventory = player.GetComponent<Inventory>();
         path = Application.dataPath + "/sv.PreRPG";
         formatter = new BinaryFormatter();
-        
+    }
+    private void Start()
+    {
+        UsefulThings.inputManager.Gameplay.SaveGame.performed += _ => SaveGame();
+        UsefulThings.inputManager.Gameplay.LoadGame.performed += _ => LoadGame();
     }
     public static void SaveGame()
     {

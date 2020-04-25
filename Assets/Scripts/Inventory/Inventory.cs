@@ -56,7 +56,7 @@ public class Inventory : MonoBehaviour
     public float InvWeight = 0;
     PlayerStats playerStats;
     
-    void Start()
+    void Awake()
     {
         MONEY = 10000;
 
@@ -65,7 +65,6 @@ public class Inventory : MonoBehaviour
             for (int i = 0; i < Capacity; i++) InventoryArray.Add(new Slot(null));
         }
         else Debug.LogError("Kavo, Capacity Error!");
-        InitialisationUI();
 
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryInteractions>();
         SlotUI = Resources.Load<GameObject>("Slot");
@@ -116,6 +115,10 @@ public class Inventory : MonoBehaviour
                 }
         }
     }
+    void Start()
+    {
+        InitialisationUI();
+    }
 
     void InitialisationUI()
     {
@@ -126,7 +129,7 @@ public class Inventory : MonoBehaviour
                 {
                     InventoryUI = UI.transform.Find("InvUI/PlayerInventory/Field").gameObject;
 
-                    MoneyBar = UI.transform.Find("Interface/Hotbar/MoneyBar/MONEY").gameObject;
+                    //MoneyBar = UI.transform.Find("Interface/Hotbar/MoneyBar/MONEY").gameObject;
 
                     Slot_Weapon_1 = UI.transform.Find("InvUI/PlayerInventory/Equipment/Weapon_1").gameObject;
                     Slot_Weapon_1.GetComponent<SlotUI>().SlotID = -1;

@@ -73,6 +73,22 @@ public class @InputManager : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""SaveGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""39ff1252-9ab5-43ca-8919-a45d9aedfb07"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""LoadGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""5bef544c-480e-4910-aae7-60254c2013f0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -207,6 +223,28 @@ public class @InputManager : IInputActionCollection, IDisposable
                     ""action"": ""Esc"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ff3d55a-44ea-4c0a-ad00-3cf236127a83"",
+                    ""path"": ""<Keyboard>/f5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SaveGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e6c3932-09c1-44f9-9c88-ec13c9636782"",
+                    ""path"": ""<Keyboard>/f6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LoadGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -306,6 +344,8 @@ public class @InputManager : IInputActionCollection, IDisposable
         m_Gameplay_HideMiniMap = m_Gameplay.FindAction("HideMiniMap", throwIfNotFound: true);
         m_Gameplay_Mouse = m_Gameplay.FindAction("Mouse", throwIfNotFound: true);
         m_Gameplay_Esc = m_Gameplay.FindAction("Esc", throwIfNotFound: true);
+        m_Gameplay_SaveGame = m_Gameplay.FindAction("SaveGame", throwIfNotFound: true);
+        m_Gameplay_LoadGame = m_Gameplay.FindAction("LoadGame", throwIfNotFound: true);
         // Spells
         m_Spells = asset.FindActionMap("Spells", throwIfNotFound: true);
         m_Spells_CastFirstSpell = m_Spells.FindAction("CastFirstSpell", throwIfNotFound: true);
@@ -368,6 +408,8 @@ public class @InputManager : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_HideMiniMap;
     private readonly InputAction m_Gameplay_Mouse;
     private readonly InputAction m_Gameplay_Esc;
+    private readonly InputAction m_Gameplay_SaveGame;
+    private readonly InputAction m_Gameplay_LoadGame;
     public struct GameplayActions
     {
         private @InputManager m_Wrapper;
@@ -379,6 +421,8 @@ public class @InputManager : IInputActionCollection, IDisposable
         public InputAction @HideMiniMap => m_Wrapper.m_Gameplay_HideMiniMap;
         public InputAction @Mouse => m_Wrapper.m_Gameplay_Mouse;
         public InputAction @Esc => m_Wrapper.m_Gameplay_Esc;
+        public InputAction @SaveGame => m_Wrapper.m_Gameplay_SaveGame;
+        public InputAction @LoadGame => m_Wrapper.m_Gameplay_LoadGame;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -409,6 +453,12 @@ public class @InputManager : IInputActionCollection, IDisposable
                 @Esc.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEsc;
                 @Esc.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEsc;
                 @Esc.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEsc;
+                @SaveGame.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSaveGame;
+                @SaveGame.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSaveGame;
+                @SaveGame.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSaveGame;
+                @LoadGame.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLoadGame;
+                @LoadGame.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLoadGame;
+                @LoadGame.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLoadGame;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -434,6 +484,12 @@ public class @InputManager : IInputActionCollection, IDisposable
                 @Esc.started += instance.OnEsc;
                 @Esc.performed += instance.OnEsc;
                 @Esc.canceled += instance.OnEsc;
+                @SaveGame.started += instance.OnSaveGame;
+                @SaveGame.performed += instance.OnSaveGame;
+                @SaveGame.canceled += instance.OnSaveGame;
+                @LoadGame.started += instance.OnLoadGame;
+                @LoadGame.performed += instance.OnLoadGame;
+                @LoadGame.canceled += instance.OnLoadGame;
             }
         }
     }
@@ -504,6 +560,8 @@ public class @InputManager : IInputActionCollection, IDisposable
         void OnHideMiniMap(InputAction.CallbackContext context);
         void OnMouse(InputAction.CallbackContext context);
         void OnEsc(InputAction.CallbackContext context);
+        void OnSaveGame(InputAction.CallbackContext context);
+        void OnLoadGame(InputAction.CallbackContext context);
     }
     public interface ISpellsActions
     {
