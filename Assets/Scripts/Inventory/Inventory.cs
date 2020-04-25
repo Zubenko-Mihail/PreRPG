@@ -56,7 +56,7 @@ public class Inventory : MonoBehaviour
     public float InvWeight = 0;
     PlayerStats playerStats;
     
-    void Awake()
+    void Start()
     {
         MONEY = 10000;
 
@@ -96,38 +96,21 @@ public class Inventory : MonoBehaviour
                         }
                     }
 
-                    for (int i = 0; i < 12; i++)
+                    AddRandomItems(8);
+
+                    break;
+                }
+            case InventoryType.Chest:
+                {
+                    for (int i = 0; i < Capacity; i++)
                     {
-                        
-                        Item item = null;
-                        int r;
-                        int lvl;
-                        int price = 1;
-                        ItemRarity rarity;
-                        Dictionary<ItemRarity, List<List<Item>>> Weapons = ItemManager.Weapons;
-                        Dictionary<ItemRarity, List<List<Item>>> Armor = ItemManager.Armor;
-                        while (item == null)
+                        if (InventoryArray[i].Item != null)
                         {
-                            lvl = Random.Range(1, 3);
-                            price = Random.Range(1, 1000);
-                            r = Random.Range(0, 100);
-                            if (r < 10) rarity = ItemRarity.Mythical;
-                            else if (r < 20) rarity = ItemRarity.Legendary;
-                            else if (r < 30) rarity = ItemRarity.Rare;
-                            else rarity = ItemRarity.Common;
-                            if (r % 2 == 0)
-                                item = Weapons[rarity][lvl][Random.Range(0, Weapons[rarity][lvl].Count)];
-                            else
-                                item = Armor[rarity][lvl][Random.Range(0, Armor[rarity][lvl].Count)];
+                            InvWeight += InventoryArray[i].Item.weight;
                         }
-                        if (item.itemType == ItemType.Weapon)
-                        {
-                            item = ItemGenerator.CreateWeapon(item);
-                        }
-                        item.price = price;
-                        if (AddItem(item, 1))
-                            Debug.Log(i.ToString() + ": Shop has " + item.name);
                     }
+
+                    AddRandomItems(6);
 
                     break;
                 }
@@ -177,6 +160,14 @@ public class Inventory : MonoBehaviour
             case InventoryType.Shop:
                 {
                     InventoryUI = UI.transform.Find("InvUI/ShopInventory/Field").gameObject;
+
+                    MoneyBar = UI.transform.Find("InvUI/ShopInventory/MoneyBar/MONEY").gameObject;
+
+                    break;
+                }
+            case InventoryType.Chest:
+                {
+                    InventoryUI = UI.transform.Find("InvUI/ChestInventory/Field").gameObject;
                     break;
                 }
         }
@@ -265,6 +256,11 @@ public class Inventory : MonoBehaviour
                     ReloadMoney();
                     break;
                 }
+            case InventoryType.Shop:
+                {
+                    ReloadMoney();
+                    break;
+                }
         }
 
         int length = InventoryArray.Count;
@@ -301,7 +297,8 @@ public class Inventory : MonoBehaviour
     }
 
     public void ReloadMoney() {
-        MoneyBar.GetComponent<Text>().text = MONEY.ToString();
+        if (MoneyBar != null)
+            MoneyBar.GetComponent<Text>().text = MONEY.ToString();
     }
 
     public bool AddItem(Item item, int count)
@@ -312,82 +309,83 @@ public class Inventory : MonoBehaviour
         {
             if (InventoryType == InventoryType.MainInventory)
                 switch (item.itemType)
-            {
-                case ItemType.Weapon:
-                    {
-                        if (Weapon_1.Item == null)
+                {
+                    case ItemType.Weapon:
                         {
-                            Weapon_1.Item = item;
-                            Weapon_1.Count = 1;
-                            added = true;
+                            if (Weapon_1.Item == null)
+                            {
+                                Weapon_1.Item = item;
+                                Weapon_1.Count = 1;
+                                added = true;
+                            }
+                            else if (Weapon_2.Item == null)
+                            {
+                                Weapon_2.Item = item;
+                                Weapon_2.Count = 1;
+                                added = true;
+                            }
+                            break;
                         }
-                        else if (Weapon_2.Item == null)
+                    case ItemType.Armor:
                         {
-                            Weapon_2.Item = item;
-                            Weapon_2.Count = 1;
-                            added = true;
+                            switch (((Armor)item).armorType)
+                            {
+                                case ArmorType.Helmet:
+                                    {
+                                        if (Helmet.Item == null)
+                                        {
+                                            Helmet.Item = item;
+                                            Helmet.Count = 1;
+                                            added = true;
+                                        }
+                                        break;
+                                    }
+                                case ArmorType.Chestplate:
+                                    {
+                                        if (Chestplate.Item == null)
+                                        {
+                                            Chestplate.Item = item;
+                                            Chestplate.Count = 1;
+                                            added = true;
+                                        }
+                                        break;
+                                    }
+                                case ArmorType.Bracers:
+                                    {
+                                        if (Bracers.Item == null)
+                                        {
+                                            Bracers.Item = item;
+                                            Bracers.Count = 1;
+                                            added = true;
+                                        }
+                                        break;
+                                    }
+                                case ArmorType.Leggings:
+                                    {
+                                        if (Leggings.Item == null)
+                                        {
+                                            Leggings.Item = item;
+                                            Leggings.Count = 1;
+                                            added = true;
+                                        }
+                                        break;
+                                    }
+                                case ArmorType.Boots:
+                                    {
+                                        if (Boots.Item == null)
+                                        {
+                                            Boots.Item = item;
+                                            Boots.Count = 1;
+                                            added = true;
+                                        }
+                                        break;
+                                    }
+                            }
+                            break;
                         }
-                        break;
-                    }
-                case ItemType.Armor:
-                    {
-                        switch (((Armor)item).armorType)
-                        {
-                            case ArmorType.Helmet:
-                                {
-                                    if (Helmet.Item == null)
-                                    {
-                                        Helmet.Item = item;
-                                        Helmet.Count = 1;
-                                        added = true;
-                                    }
-                                    break;
-                                }
-                            case ArmorType.Chestplate:
-                                {
-                                    if (Chestplate.Item == null)
-                                    {
-                                        Chestplate.Item = item;
-                                        Chestplate.Count = 1;
-                                        added = true;
-                                    }
-                                    break;
-                                }
-                            case ArmorType.Bracers:
-                                {
-                                    if (Bracers.Item == null)
-                                    {
-                                        Bracers.Item = item;
-                                        Bracers.Count = 1;
-                                        added = true;
-                                    }
-                                    break;
-                                }
-                            case ArmorType.Leggings:
-                                {
-                                    if (Leggings.Item == null)
-                                    {
-                                        Leggings.Item = item;
-                                        Leggings.Count = 1;
-                                        added = true;
-                                    }
-                                    break;
-                                }
-                            case ArmorType.Boots:
-                                {
-                                    if (Boots.Item == null)
-                                    {
-                                        Boots.Item = item;
-                                        Boots.Count = 1;
-                                        added = true;
-                                    }
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-                default: break;
-            }
+                    default: break;
+                }
+            
 
             if (!added)
             {
@@ -407,6 +405,41 @@ public class Inventory : MonoBehaviour
         if (InventoryType == InventoryType.MainInventory)
             playerStats.UpdateEquipment();
         return added;
+    }
+
+    public void AddRandomItems(int number = 1)
+    {
+        for (int i = 0; i < number; i++)
+        {
+            Item item = null;
+            int r;
+            int lvl;
+            int price = 1;
+            ItemRarity rarity;
+            Dictionary<ItemRarity, List<List<Item>>> Weapons = ItemManager.Weapons;
+            Dictionary<ItemRarity, List<List<Item>>> Armor = ItemManager.Armor;
+            while (item == null)
+            {
+                lvl = Random.Range(1, 3);
+                price = Random.Range(1, 1000);
+                r = Random.Range(0, 100);
+                if (r < 10) rarity = ItemRarity.Mythical;
+                else if (r < 20) rarity = ItemRarity.Legendary;
+                else if (r < 30) rarity = ItemRarity.Rare;
+                else rarity = ItemRarity.Common;
+                if (r % 2 == 0)
+                    item = Weapons[rarity][lvl][Random.Range(0, Weapons[rarity][lvl].Count)];
+                else
+                    item = Armor[rarity][lvl][Random.Range(0, Armor[rarity][lvl].Count)];
+            }
+            if (item.itemType == ItemType.Weapon)
+            {
+                item = ItemGenerator.CreateWeapon(item);
+            }
+            item.price = price;
+            if (!AddItem(item, 1))
+                return;
+        }
     }
 
     public void Drop()
