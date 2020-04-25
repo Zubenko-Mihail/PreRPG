@@ -17,7 +17,7 @@ public class Drop : MonoBehaviour
 
     public void OnClickDrop()
     {
-        if (Player.DraggingSlot != null)
+        if (Player.DraggingSlot != null && Player.DraggingInventory.InventoryType == InventoryType.MainInventory)
         {
             ItemGenerator.SpawnItem(Player.DraggingSlot.Item, Player.transform.position);
             Player.DraggingInventory.Drop();
