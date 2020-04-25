@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EffectsController : MonoBehaviour
 {
-    [SerializeField] Material shakeMaterial;
+    [SerializeField] public Material shakeMaterial;
 
     private void Start()
     {

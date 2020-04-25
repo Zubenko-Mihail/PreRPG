@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 public class CameraMove : MonoBehaviour
 {
     GameObject oporaY, cam;
@@ -21,6 +21,7 @@ public class CameraMove : MonoBehaviour
     }
     private void Start()
     {
+        UsefulThings.inputManager.Gameplay.SetDefaultCamPosition.performed += _ => SetDefaultCamPosition();
         rayRange = Vector3.Distance(cam.transform.position, oporaY.transform.position);
         ray = new Ray(oporaY.transform.position, cam.transform.position - oporaY.transform.position);
         if (Physics.Raycast(ray, out hit, rayRange))
@@ -39,22 +40,18 @@ public class CameraMove : MonoBehaviour
     private void Update()
     {
         UpdateOporaPos();
-        if (Input.GetKeyUp(KeyCode.Mouse1))
+        if (UsefulThings.mouse.rightButton.wasReleasedThisFrame)
         {
             controls.canInteract = true;
-        }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            oporaY.transform.localRotation = startRot;
         }
     }
     void MoveCam()
     {
-        if (Input.GetKey(KeyCode.Mouse1))
+        if (UsefulThings.mouse.rightButton.isPressed)
         {
             controls.canInteract = false;
             prevRot = oporaY.transform.localEulerAngles;
-            oporaY.transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * 2, Space.World);
+            oporaY.transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * 2, Space.World); ;
             oporaY.transform.Rotate(Vector3.left, Input.GetAxis("Mouse Y") * 2, Space.Self);
             if (oporaY.transform.localEulerAngles.z > 100)
             {
@@ -70,7 +67,6 @@ public class CameraMove : MonoBehaviour
                 cam.transform.localPosition = startPos;
             }
         }
-        //print(controls.isRunning);
         if (controls.isRunning)
         {
             ray = new Ray(oporaY.transform.position, cam.transform.position - oporaY.transform.position);
@@ -86,10 +82,10 @@ public class CameraMove : MonoBehaviour
         if (hit.point == Vector3.zero)
         {
             //print(cam.transform.localPosition.magnitude);
-            if (cam.transform.localPosition.magnitude > 3 && Input.mouseScrollDelta.y > 0)
-                cam.transform.position += cam.transform.forward * Input.mouseScrollDelta.y;
-            if (cam.transform.localPosition.magnitude < 8 && Input.mouseScrollDelta.y < 0)
-                cam.transform.position += cam.transform.forward * Input.mouseScrollDelta.y;
+            if (cam.transform.localPosition.magnitude > 3 &&  UsefulThings.mouse.scroll.ReadValue().y > 0)
+                cam.transform.position += cam.transform.forward * UsefulThings.mouse.scroll.ReadValue().normalized.y;
+            if (cam.transform.localPosition.magnitude < 8 && UsefulThings.mouse.scroll.ReadValue().y < 0)
+                cam.transform.position += cam.transform.forward * UsefulThings.mouse.scroll.ReadValue().normalized.y;
             startPos = cam.transform.localPosition;
             rayRange = Vector3.Distance(cam.transform.position, oporaY.transform.position);
         }
@@ -97,5 +93,9 @@ public class CameraMove : MonoBehaviour
     void UpdateOporaPos()
     {
         oporaY.transform.position = transform.position + Vector3.up * 1.5f;
+    }
+    void SetDefaultCamPosition()
+    {
+        oporaY.transform.localRotation = startRot;
     }
 }

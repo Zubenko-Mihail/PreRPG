@@ -48,10 +48,10 @@ public class DialoguesManager : MonoBehaviour
             lastGeneredButtonText = null;
             for (int i = 1; i <= 10; i++)
             {
-                if (Input.mousePosition.x >= (Screen.width - Screen.width * 0.78f) / 2 &&
-                    Input.mousePosition.x <= Screen.width * 0.78f &&
-                    Screen.height - Input.mousePosition.y >= Screen.height * (0.6f + (count + 1) * 0.065f) + offset &&
-                    Screen.height - Input.mousePosition.y <= Screen.height * (0.6f + (count + 1) * 0.065f) + offset + Screen.height * 0.06f)
+                if (UsefulThings.mouse.position.ReadValue().x >= (Screen.width - Screen.width * 0.78f) / 2 &&
+                    UsefulThings.mouse.position.ReadValue().x <= Screen.width * 0.78f &&
+                    Screen.height - UsefulThings.mouse.position.ReadValue().y >= Screen.height * (0.6f + (count + 1) * 0.065f) + offset &&
+                    Screen.height - UsefulThings.mouse.position.ReadValue().y <= Screen.height * (0.6f + (count + 1) * 0.065f) + offset + Screen.height * 0.06f)
                 {
                     GUI.contentColor = Color.green;
                 }
@@ -98,7 +98,7 @@ public class DialoguesManager : MonoBehaviour
             GUI.VerticalScrollbar(new Rect(Screen.width * 0.9f, Screen.height * 0.55f, Screen.width * 0.95f, Screen.height * 0.44f),
                 Screen.height * 0.55f - (offset * Screen.height * 0.4f / Mathf.Clamp(mCount - 4, 1, 10) / ((Screen.height * 0.06f) + 0.065f)),
                 Screen.height * 0.4f / Mathf.Clamp(mCount - 4, 1, 10), Screen.height * 0.55f, Screen.height * 0.95f);
-            offset += Input.mouseScrollDelta.y * 2;
+            offset += 1/* Mouse scroll delta*/ *2;
             offset = Mathf.Clamp(offset, -((Screen.height * 0.06f) + 0.065f) * (mCount >= 4 ? mCount - 4 : 0), 0);
             count = 0;
         }

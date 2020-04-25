@@ -45,11 +45,11 @@ public class PlayerStats : MonoBehaviour
         maxHP = 100;
         HP = maxHP;
 
-        RightHand = TransformSearch(transform, "RightHand").gameObject;
-        Head = TransformSearch(transform, "Head").gameObject;
-        Chest = TransformSearch(transform, "Chest").gameObject;
-        LeftLeg = TransformSearch(transform, "LeftLeg").gameObject;
-        RightLeg = TransformSearch(transform, "RightLeg").gameObject;
+        RightHand = UsefulThings.TransformSearch(transform, "RightHand").gameObject;
+        Head = UsefulThings.TransformSearch(transform, "Head").gameObject;
+        Chest = UsefulThings.TransformSearch(transform, "Chest").gameObject;
+        LeftLeg = UsefulThings.TransformSearch(transform, "LeftLeg").gameObject;
+        RightLeg = UsefulThings.TransformSearch(transform, "RightLeg").gameObject;
 
         CreateMesh(RightHand);
         CreateMesh(Head);
@@ -160,20 +160,6 @@ public class PlayerStats : MonoBehaviour
         UI.SetHPNormalized(HP / (float)maxHP);
         SceneLoader.LoadScene("Game");
     }
-    public static Transform TransformSearch(Transform transform, string name)
-    {
-        Transform go;
-        if (transform.Find(name) == null)
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                go = TransformSearch(transform.GetChild(i), name);
-                if (go != null)
-                    return go;
-            }
-            if (transform.childCount == 0)
-                return null;
-        }
-        return transform.Find(name);
-    }
+    
+    
 }

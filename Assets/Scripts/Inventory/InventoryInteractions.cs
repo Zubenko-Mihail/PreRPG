@@ -55,20 +55,27 @@ public class InventoryInteractions : MonoBehaviour
 
         Drop = UI.transform.Find("InvUI/PlayerInventory/Drop").gameObject.GetComponent<Drop>();
         StopDrag();
+
+    }
+    private void Start()
+    {
+        UsefulThings.inputManager.Gameplay.OpenInventory.performed += _ => ShowInventory();
+        UsefulThings.inputManager.Gameplay.OpenInventory.performed += _ => StopDrag();
+        
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(PlayerInventoryButton) || (Input.GetKeyDown(Esc) && InventoryPanel.activeSelf))
+        if (UsefulThings.kb.escapeKey.wasPressedThisFrame && InventoryPanel.activeSelf)
         {
             ShowInventory();
         }
 
         if (IsDragging)
         {
-            DragIcon.transform.position = Input.mousePosition;
-            if (Input.GetKeyDown(Esc) || Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(PlayerInventoryButton)) StopDrag();
-            if (Input.GetKeyDown(QuickDrop)) Drop.OnClickDrop();
+            DragIcon.transform.position = UsefulThings.mouse.position.ReadValue();
+            if (UsefulThings.kb.escapeKey.wasPressedThisFrame || UsefulThings.mouse.rightButton.wasPressedThisFrame) StopDrag();
+            if (UsefulThings.kb.dKey.wasPressedThisFrame) Drop.OnClickDrop();
         }
     }
 

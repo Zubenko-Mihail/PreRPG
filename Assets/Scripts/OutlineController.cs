@@ -5,7 +5,7 @@ using UnityEngine;
 public class OutlineController : MonoBehaviour
 {
     RaycastHit hit;
-    Camera camera;
+    new Camera camera;
     public GameObject prev;
     Dictionary<string, Color> colors = new Dictionary<string, Color>();
     Attack attack;
@@ -20,7 +20,7 @@ public class OutlineController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = camera.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
         if (Physics.Raycast(ray, out hit))
         {
             prev = hit.collider.gameObject;

@@ -25,8 +25,6 @@ public class SlotUI : MonoBehaviour
             default: SlotCopy = owner.InventoryArray[SlotID]; break;
         }
 
-        Debug.Log(SlotID);
-        Debug.Log(owner.chosenSlot);
 
         if (owner.Player.IsDragging)
         {
@@ -208,7 +206,7 @@ public class SlotUI : MonoBehaviour
                         "\nCost: " + SlotItem.Item.price;
 
                         GUI.skin.box.fontSize = 15;
-                        GUI.Box(new Rect(Input.mousePosition.x + 10, Screen.height - Input.mousePosition.y + 10, 5 * Result.Length, GUI.skin.box.fontSize + 120), Result);
+                        GUI.Box(new Rect(UsefulThings.mouse.position.ReadValue().x + 10, Screen.height - UsefulThings.mouse.position.ReadValue().y + 10, 5 * Result.Length, GUI.skin.box.fontSize + 120), Result);
 
                         break;
                     }

@@ -19,7 +19,8 @@ public class EnemyConnector : MonoBehaviour
     NavMeshAgent nav;
     Vector3 lookTargetVector3;
     Quaternion lookDirectionTarget;
-    public Enemy enemy = new Turret("turr", 12, 100);
+    [HideInInspector]
+    public Enemy enemy;
     public string enemyType;
     RaycastHit hit;
     int layerMask = 1;
@@ -32,11 +33,6 @@ public class EnemyConnector : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         attackScript = GetComponent<Attack>();
         animator = GetComponent<Animator>();
-        if (enemyType == "Humanoid")
-        {
-            enemy = new Humanoid("Humanoid", 5, 100);
-            UpdateAttackAnimBehaviours();
-        }
     }
     public void GetDamage(Damage Damage)
     {
@@ -45,6 +41,7 @@ public class EnemyConnector : MonoBehaviour
     }
     public void Start()
     {
+        UpdateAttackAnimBehaviours();
         Targets = GameObject.FindGameObjectsWithTag("Player");
         gameObject.transform.Find("Radius").gameObject.AddComponent<SphereCollider>();
         gameObject.transform.Find("Radius").gameObject.AddComponent<EnemyTrigger>();
@@ -183,6 +180,7 @@ public class EnemyConnector : MonoBehaviour
     }
     private void UpdateAttackAnimBehaviours()
     {
+        if (animator!= null)
         foreach (AttackAnimBehaviour aAB in animator.GetBehaviours<AttackAnimBehaviour>())
         {
             aAB.attackSpeed = enemy.attackSpeed;

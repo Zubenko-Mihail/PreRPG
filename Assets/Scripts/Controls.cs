@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 public class Controls : MonoBehaviour
@@ -37,6 +38,9 @@ public class Controls : MonoBehaviour
     [Space]
     public KeyCode Esc = KeyCode.Escape;
     public string NPCName;
+
+    Keyboard kb;
+    Mouse mouse;
     private void Awake()
     {
         layerMask = 1 << LayerMask.NameToLayer("Default");
@@ -57,7 +61,8 @@ public class Controls : MonoBehaviour
         InventoryPanel = UI.transform.Find("InvUI/PlayerInventory").gameObject;
         MoveParticles = Resources.Load<GameObject>("Prefabs/Move Effect");
         dialoguesManager = UI.GetComponent<DialoguesManager>();
-
+        kb = UsefulThings.kb;
+        mouse = UsefulThings.mouse;
     }
 
     void Update()
@@ -86,13 +91,12 @@ public class Controls : MonoBehaviour
             canBeginMove = false;
         }
 
-
         Interact();
         Map();
         CheckExitDia();
         Move();
 
-        if (Input.GetKeyDown(KeyCode.C))
+        if (kb.cKey.isPressed)//GetKeyDown(KeyCode.C))
         {
             Item item = null;
             int r;
@@ -122,11 +126,11 @@ public class Controls : MonoBehaviour
             item.price = price;
             ItemGenerator.SpawnItem(item, transform.position);
         }
-        if (Input.GetKeyDown(KeyCode.H))
+        if (kb.hKey.wasPressedThisFrame)
             playerStats.GetDamage(new Damage(10));
-        if (Input.GetKeyDown(KeyCode.V))
+        if (kb.vKey.wasPressedThisFrame)
             SaveManager.SaveGame();
-        if (Input.GetKeyDown(KeyCode.L))
+        if (kb.lKey.wasPressedThisFrame)
             SaveManager.LoadGame();
     }
 
@@ -137,7 +141,7 @@ public class Controls : MonoBehaviour
 
     void CheckExitDia()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (kb.escapeKey.wasPressedThisFrame)
         {
             dialoguesManager.StopDia();
         }
@@ -145,8 +149,8 @@ public class Controls : MonoBehaviour
 
     void IsPressed()
     {
-        if (Input.GetKey(KeyCode.Mouse0)) alreadyHolding += Time.deltaTime;
-        if (Input.GetKeyUp(KeyCode.Mouse0))
+        if (mouse.leftButton.isPressed) alreadyHolding += Time.deltaTime;
+        if (mouse.leftButton.wasReleasedThisFrame)
         {
             alreadyHolding = 0;
             wasBeingHeld = false;
@@ -157,12 +161,12 @@ public class Controls : MonoBehaviour
     void Move()
     {
         IsPressed();
-        if (Input.GetKey(KeyCode.Mouse0) && wasBeingHeld && canInteract && canMove)
+        if (mouse.leftButton.isPressed && wasBeingHeld && canInteract && canMove)
         {
             nav.ResetPath();
             isRunning = true;
             animator.SetBool("isRunning", true);
-            MoveRay = camComponent.ScreenPointToRay(Input.mousePosition);
+            MoveRay = camComponent.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
             if (Physics.Raycast(MoveRay, out hit, Mathf.Infinity, layerMask))
             {
                 targetMove = hit.point;
@@ -186,23 +190,20 @@ public class Controls : MonoBehaviour
         miniCam.transform.position = transform.position + Vector3.up * 100;
 
     }
-
     void Map()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-        }
+
     }
 
     void Interact()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (mouse.leftButton.wasPressedThisFrame)
         {
             attackScript.RemoveTarget();
         }
         GameObject go;
-        Ray ray = camComponent.ScreenPointToRay(Input.mousePosition);
-        if (Input.GetKeyUp(KeyCode.Mouse0) && canInteract)
+        Ray ray = camComponent.ScreenPointToRay(UsefulThings.mouse.position.ReadValue());
+        if (mouse.leftButton.wasReleasedThisFrame && canInteract)
         {
             if (waitUntilInteract != null)
                 StopCoroutine(waitUntilInteract);
@@ -313,7 +314,7 @@ public class Controls : MonoBehaviour
 
     IEnumerator SetTarget(GameObject target)
     {
-        while (!Input.GetKey(KeyCode.Mouse0))
+        while (!mouse.leftButton.isPressed)
         {
             if (target == null) break;
             if (nav.hasPath && canInteract)

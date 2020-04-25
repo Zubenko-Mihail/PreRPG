@@ -26,14 +26,6 @@ public class SceneLoader : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            LoadScene("lev2");
-        }
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            LoadScene("lev3");
-        }
 
     }
 
@@ -89,6 +81,7 @@ public class SceneLoader : MonoBehaviour
                 }
             }
             nav.enabled = true;
+            EntitySpawner.SpawnAllEnemies();
         }
     }
 }

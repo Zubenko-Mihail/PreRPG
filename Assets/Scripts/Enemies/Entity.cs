@@ -17,13 +17,14 @@ namespace Entities
         Humanoid
     }
 }
-public abstract class Entity
+public abstract class Entity : ScriptableObject
 {
-    public string name;
-    public EntityType entityType;
+    public new string name;
+    [HideInInspector]public EntityType entityType;
     public float HP = 100;
     public float maxHP = 100;
     public float speed = 7;
+    public GameObject prefab;
     public void GetDamage(Damage Damage)
     {
 
@@ -31,60 +32,22 @@ public abstract class Entity
         HP -= currDamage;
 
     }
+
 }
 
-public abstract class Enemy : Entity
+public abstract class Enemy : Entity, ISerializationCallbackReceiver
 {
-    public float damage;
-    public float attackRange, attackSpeed;
-    public float lookRange;
-    public EnemyType enemyType;
+    public float damage=5;
+    public float attackRange=3, attackSpeed=0.5f;
+    public float lookRange=12;
+    [HideInInspector]public EnemyType enemyType;
     public Enemy()
     {
         entityType = EntityType.Enemy;
     }
-}
-public class Dummy : Enemy
-{
-    public Dummy(string name, float damage, int HP)
-    {
-        enemyType = EnemyType.Dummy;
-        base.name = name;
-        base.damage = damage;
-        base.HP = HP;
-        maxHP = HP;
-        attackRange = 2;
-    }
-}
 
-public class Turret : Enemy
-{
-    public Turret(string name, float damage, int HP)
-    {
-        enemyType = EnemyType.Turret;
-        base.name = name;
-        base.damage = damage;
-        base.HP = HP;
-        maxHP = HP;
-        attackRange = 5;
-        attackSpeed = 0.3f;
-        lookRange = 10;
-    }
-}
-
-public class Humanoid : Enemy
-{
-    public Humanoid(string name, float damage, int HP)
-    {
-        enemyType = EnemyType.Humanoid;
-        base.name = name;
-        base.damage = damage;
-        base.HP = HP;
-        maxHP = HP;
-        attackRange = 1;
-        attackSpeed = 0.6f;
-        lookRange = 10;
-    }
+    public abstract void OnAfterDeserialize();
+    public void OnBeforeSerialize() { }
 }
 
 
