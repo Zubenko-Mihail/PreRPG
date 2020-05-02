@@ -43,7 +43,8 @@ public class Forge : MonoBehaviour
         //}
         if (UsefulThings.kb.escapeKey.wasPressedThisFrame)
         {
-            StopCraft();
+            if(Craft)
+                StopCraft();
         }
 
         if (Craft)

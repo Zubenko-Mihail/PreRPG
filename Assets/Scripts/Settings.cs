@@ -17,17 +17,15 @@ public class Settings : MonoBehaviour
     }
     private void Start()
     {
-        UsefulThings.inputManager.Gameplay.Esc.performed += _ => gameObject.SetActive(false);
+        //UsefulThings.inputManager.Gameplay.Esc.performed += _ => gameObject.SetActive(false);
         Bindings.Add("OpenInventory", UsefulThings.inputManager.Gameplay.OpenInventory);
         Bindings.Add("SetDefaultCamPosition", UsefulThings.inputManager.Gameplay.SetDefaultCamPosition);
+        Bindings.Add("SaveGame", UsefulThings.inputManager.Gameplay.SaveGame);
+        Bindings.Add("LoadGame", UsefulThings.inputManager.Gameplay.LoadGame);
         Bindings.Add("CastFirstSpell", UsefulThings.inputManager.Spells.CastFirstSpell);
         Bindings.Add("CastSecondSpell", UsefulThings.inputManager.Spells.CastSecondSpell);
         Bindings.Add("CastThirdSpell", UsefulThings.inputManager.Spells.CastThirdSpell);
-    }
-    private void Update()
-    {
-        if(rebindOperation!=null)
-            print(rebindOperation.completed);
+
     }
     public void ChangeControls(string action)
     {
@@ -48,9 +46,10 @@ public class Settings : MonoBehaviour
     }
     void OnComplete(InputActionRebindingExtensions.RebindingOperation rebindingOperation)
     {
+        
         Text text = currButton.transform.GetComponentInChildren<Text>();
         string s = rebindingOperation.action.bindings[0].effectivePath;
-        text.text = text.gameObject.transform.parent.name + " " + s.Substring(11, s.Length - 11);
+        text.text = text.gameObject.transform.parent.name + " <color=red>" + s.Substring(11, s.Length - 11) + "</color>";
         UsefulThings.inputManager.Enable();
         print("comleted");
     }
