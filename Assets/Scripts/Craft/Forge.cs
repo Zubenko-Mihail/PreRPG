@@ -10,9 +10,19 @@ public class Forge : MonoBehaviour
     public Transform forge;
 
     public GameObject UI;
+
     public GameObject ForgeQTE;
     public GameObject BTPBox;
     public GameObject LogBox;
+
+    public GameObject ForgeLine;
+    public GameObject Jacque;
+    Transform jacquePos;
+    float progress;
+    float step;
+    Vector2 start = new Vector2(-250f, -30f);
+    Vector2 end = new Vector2(250f, -30f);
+    Vector2 c;
 
     public int QTEGen;
     public int WaitingForKey;
@@ -24,15 +34,23 @@ public class Forge : MonoBehaviour
     public int spawn;
 
     public bool Craft = false;
+    public bool LineCraft = false;
 
     private void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryInteractions>();
         forge = transform;
         UI = GameObject.Find("UI");
+
         ForgeQTE = UI.transform.Find("CraftInterface/ForgeQTE").gameObject;
         BTPBox = UI.transform.Find("CraftInterface/ForgeQTE/ButtonToPress").gameObject;
         LogBox = UI.transform.Find("CraftInterface/ForgeQTE/Log").gameObject;
+
+        ForgeLine = UI.transform.Find("CraftInterface/ForgeLine").gameObject;
+        Jacque = UI.transform.Find("CraftInterface/ForgeLine/Jacque").gameObject;
+        jacquePos = Jacque.transform;
+        step = 0.01f;
+        StartLineCraft();
     }
 
     private void Update()
@@ -41,10 +59,45 @@ public class Forge : MonoBehaviour
         //{
         //   StartCraft();
         //}
+
         if (UsefulThings.kb.escapeKey.wasPressedThisFrame)
         {
-            if(Craft)
+            if(Craft || LineCraft)
                 StopCraft();
+        }
+
+        if (LineCraft)
+        {
+            jacquePos.localPosition = Vector2.Lerp(start, end, progress);
+            progress += step;
+
+            if (UsefulThings.kb.anyKey.wasPressedThisFrame)
+            {
+                if (0.6499f < progress && progress < 0.7501f)
+                {
+                    pass++;
+                    Debug.Log("PASS!!!");
+                    Debug.Log(progress);
+                }
+                else
+                {
+                    fail++;
+                    Debug.Log("Fail");
+                    Debug.Log(progress);
+                }
+                spawn++;
+
+                if (spawn >= 10)
+                    Spawning();
+
+                progress = 0;
+                step = Mathf.Abs(step);
+            }
+
+            if (progress >= 1.01f)
+                step = -step;
+            if (progress <= -0.01f)
+                step = -step;
         }
 
         if (Craft)
@@ -130,11 +183,33 @@ public class Forge : MonoBehaviour
         spawn = 0;
     }
 
+    public void StartLineCraft()
+    {
+        Time.timeScale = 0;
+        LineCraft = true;
+        CorrectKey = 0;
+        WaitingForKey = 0;
+        CountingDown = 1;
+        QTEGen = 4;
+
+        ForgeLine.SetActive(true);
+        jacquePos.localPosition = new Vector2(-250, -30);
+        start = new Vector2(-250f, -30f);
+        end = new Vector2(250f, -30f);
+        step = Mathf.Abs(step);
+
+        fail = 0;
+        pass = 0;
+        spawn = 0;
+    }
+
     public void StopCraft()
     {
         Time.timeScale = 1;
         Craft = false;
+        LineCraft = false;
         ForgeQTE.SetActive(false);
+        ForgeLine.SetActive(false);
         spawn = 0;
     }
 
