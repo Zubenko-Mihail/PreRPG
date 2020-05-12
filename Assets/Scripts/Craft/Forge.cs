@@ -1,41 +1,57 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.UI;
 using Items;
 
 public class Forge : MonoBehaviour
 {
+    public CraftType forge_type;
+
     public InventoryInteractions Player;
     public Transform forge;
 
     public GameObject UI;
 
+    #region QTE
+    public bool QTECraft = false;
+
     public GameObject ForgeQTE;
     public GameObject BTPBox;
     public GameObject LogBox;
-
-    public GameObject ForgeLine;
-    public GameObject Jacque;
-    Transform jacquePos;
-    float progress;
-    float step;
-    Vector2 start = new Vector2(-250f, -30f);
-    Vector2 end = new Vector2(250f, -30f);
-    Vector2 c;
 
     public int QTEGen;
     public int WaitingForKey;
     public int CorrectKey;
     public int CountingDown;
+    #endregion
 
-    public int fail;
-    public int pass;
-    public int spawn;
-
-    public bool Craft = false;
+    #region Line
     public bool LineCraft = false;
 
+    public GameObject ForgeLine;
+    public GameObject RedLine;
+    public RectTransform YellowLine;
+    public RectTransform GreenLine;
+    public GameObject Jacque;
+
+    public const int RedLine_size = 500;
+    List<int> YellowLine_size;
+    List<int> GreenLine_size;
+    Transform Jacque_pos;
+
+    float progress;
+    float step;
+    Vector2 start = new Vector2(-250f, -30f);
+    Vector2 end = new Vector2(250f, -30f);
+    #endregion
+
+    public int fail;
+    public int medium;
+    public int pass;
+    public int spawn;
+    
     private void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryInteractions>();
@@ -47,60 +63,46 @@ public class Forge : MonoBehaviour
         LogBox = UI.transform.Find("CraftInterface/ForgeQTE/Log").gameObject;
 
         ForgeLine = UI.transform.Find("CraftInterface/ForgeLine").gameObject;
-        Jacque = UI.transform.Find("CraftInterface/ForgeLine/Jacque").gameObject;
-        jacquePos = Jacque.transform;
+        RedLine = UI.transform.Find("CraftInterface/ForgeLine/Red").gameObject;
+        YellowLine = UI.transform.Find("CraftInterface/ForgeLine/Red/Yellow").gameObject.GetComponent<RectTransform>();
+        GreenLine = UI.transform.Find("CraftInterface/ForgeLine/Red/Yellow/Green").gameObject.GetComponent<RectTransform>();
+        Jacque = UI.transform.Find("CraftInterface/ForgeLine/Red/Jacque").gameObject;
+
+        #region sizes
+        GreenLine_size = new List<int>();
+        GreenLine_size.Add(22);
+        GreenLine_size.Add(18);
+        GreenLine_size.Add(15);
+        GreenLine_size.Add(12);
+        GreenLine_size.Add(9);
+        GreenLine_size.Add(7);
+        GreenLine_size.Add(5);
+        GreenLine_size.Add(3);
+        GreenLine_size.Add(2);
+        GreenLine_size.Add(1);
+        YellowLine_size = new List<int>(GreenLine_size);
+        for (int i = 0; i < 10; i++)
+            YellowLine_size[i] *= 3;
+        #endregion
+        Jacque_pos = Jacque.transform;
         step = 0.01f;
+
         StartLineCraft();
     }
 
     private void Update()
     {
         //if (Input.GetKeyDown(KeyCode.O))
-        //{
         //   StartCraft();
-        //}
 
         if (UsefulThings.kb.escapeKey.wasPressedThisFrame)
-        {
-            if(Craft || LineCraft)
+            if(QTECraft || LineCraft)
                 StopCraft();
-        }
 
         if (LineCraft)
-        {
-            jacquePos.localPosition = Vector2.Lerp(start, end, progress);
-            progress += step;
+            LineCraftProcess();
 
-            if (UsefulThings.kb.anyKey.wasPressedThisFrame)
-            {
-                if (0.6499f < progress && progress < 0.7501f)
-                {
-                    pass++;
-                    Debug.Log("PASS!!!");
-                    Debug.Log(progress);
-                }
-                else
-                {
-                    fail++;
-                    Debug.Log("Fail");
-                    Debug.Log(progress);
-                }
-                spawn++;
-
-                if (spawn >= 10)
-                    Spawning();
-
-                progress = 0;
-                step = Mathf.Abs(step);
-            }
-
-            if (progress >= 1.01f)
-                step = -step;
-            if (progress <= -0.01f)
-                step = -step;
-        }
-
-        if (Craft)
+        if (QTECraft)
         {
             if (WaitingForKey == 0)
             {
@@ -171,8 +173,25 @@ public class Forge : MonoBehaviour
 
     public void StartCraft()
     {
+        switch (forge_type)
+        {
+            case CraftType.QTE:
+                {
+                    StartQTECraft();
+                    break;
+                }
+            case CraftType.Line:
+                {
+                    StartLineCraft();
+                    break;
+                }
+        }
+    }
+
+    void StartQTECraft()
+    {
         Time.timeScale = 0;
-        Craft = true;
+        QTECraft = true;
         CorrectKey = 0;
         WaitingForKey = 0;
         CountingDown = 1;
@@ -183,17 +202,17 @@ public class Forge : MonoBehaviour
         spawn = 0;
     }
 
-    public void StartLineCraft()
+    void StartLineCraft()
     {
         Time.timeScale = 0;
         LineCraft = true;
-        CorrectKey = 0;
-        WaitingForKey = 0;
-        CountingDown = 1;
-        QTEGen = 4;
 
         ForgeLine.SetActive(true);
-        jacquePos.localPosition = new Vector2(-250, -30);
+
+        ChangeLineSize(0);
+
+        Jacque_pos.localPosition = new Vector2(-250, -30);
+
         start = new Vector2(-250f, -30f);
         end = new Vector2(250f, -30f);
         step = Mathf.Abs(step);
@@ -203,10 +222,62 @@ public class Forge : MonoBehaviour
         spawn = 0;
     }
 
+    void LineCraftProcess()
+    {
+        Jacque_pos.localPosition = Vector2.Lerp(start, end, progress);
+        progress += step;
+
+        if (UsefulThings.kb.anyKey.wasPressedThisFrame)
+        {
+            if ((YellowLine.anchoredPosition.x + GreenLine.anchoredPosition.x - GreenLine.sizeDelta.x / 2) / 5 + 50 < progress * 100 && progress * 100 < (YellowLine.anchoredPosition.x + GreenLine.anchoredPosition.x + GreenLine.sizeDelta.x / 2) / 5 + 50)
+            {
+                pass++;
+                if (pass < 10)
+                    ChangeLineSize(pass);
+                ChangeLinePosition();
+                Debug.Log("PASS!!!");
+            }
+            else if ((YellowLine.anchoredPosition.x - GreenLine.sizeDelta.x / 2) / 5 + 50 < progress * 100 && progress * 100 < (YellowLine.anchoredPosition.x + GreenLine.sizeDelta.x / 2) / 5 + 50)
+            {
+                medium++;
+                ChangeLinePosition();
+                Debug.Log("Medium");
+            }
+            else {
+                fail++;
+                Debug.Log("Fail");
+            }
+            spawn++;
+
+            if (spawn >= 10)
+                Spawning();
+
+            progress = 0;
+            step = Mathf.Abs(step);
+        }
+
+        if (progress >= 1.01f)
+            step = -step;
+        if (progress <= -0.01f)
+            step = -step;
+    }
+
+    void ChangeLinePosition()
+    {
+        YellowLine.anchoredPosition = new Vector2(Random.Range(-RedLine_size / 2 + YellowLine.sizeDelta.x / 2, RedLine_size / 2 - YellowLine.sizeDelta.x / 2), 0);
+        GreenLine.anchoredPosition = new Vector2(Random.Range(-YellowLine.sizeDelta.x / 2 + GreenLine.sizeDelta.x / 2, YellowLine.sizeDelta.x / 2 - GreenLine.sizeDelta.x / 2), 0);
+    }
+
+    void ChangeLineSize(int k)
+    {
+        YellowLine.sizeDelta = new Vector2(5 * YellowLine_size[k], 50.0f);
+        GreenLine.sizeDelta = new Vector2(5 * GreenLine_size[k], 50.0f);
+    }
+
     public void StopCraft()
     {
         Time.timeScale = 1;
-        Craft = false;
+        QTECraft = false;
         LineCraft = false;
         ForgeQTE.SetActive(false);
         ForgeLine.SetActive(false);
@@ -299,4 +370,10 @@ public class Forge : MonoBehaviour
                 Spawning();
         }
     }
+}
+
+public enum CraftType
+{
+    QTE,
+    Line
 }

@@ -258,7 +258,7 @@ public class Controls : MonoBehaviour
             {
                 case "Forge":
                     {
-                        if (!go.GetComponent<Forge>().Craft)
+                        if (!go.GetComponent<Forge>().QTECraft || !go.GetComponent<Forge>().LineCraft)
                             go.GetComponent<Forge>().StartCraft();
                         break;
                     }
