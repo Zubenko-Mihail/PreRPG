@@ -35,6 +35,7 @@ public class Forge : MonoBehaviour
     public RectTransform YellowLine;
     public RectTransform GreenLine;
     public GameObject Jacque;
+    public Text LineLog;
 
     public const int RedLine_size = 500;
     List<int> YellowLine_size;
@@ -67,6 +68,7 @@ public class Forge : MonoBehaviour
         YellowLine = UI.transform.Find("CraftInterface/ForgeLine/Red/Yellow").gameObject.GetComponent<RectTransform>();
         GreenLine = UI.transform.Find("CraftInterface/ForgeLine/Red/Yellow/Green").gameObject.GetComponent<RectTransform>();
         Jacque = UI.transform.Find("CraftInterface/ForgeLine/Red/Jacque").gameObject;
+        LineLog = UI.transform.Find("CraftInterface/ForgeLine/Log").gameObject.GetComponent<Text>();
 
         #region sizes
         GreenLine_size = new List<int>();
@@ -208,6 +210,7 @@ public class Forge : MonoBehaviour
         LineCraft = true;
 
         ForgeLine.SetActive(true);
+        LineLog.text = "Press \"B\"\nLevel of Difficulty -- 1";
 
         ChangeLineSize(0);
 
@@ -229,15 +232,19 @@ public class Forge : MonoBehaviour
 
         if (UsefulThings.kb.anyKey.wasPressedThisFrame)
         {
+            Debug.Log("Green zone: " + ((YellowLine.anchoredPosition.x + GreenLine.anchoredPosition.x - GreenLine.sizeDelta.x / 2) / 5 + 50).ToString() + " -- " + ((YellowLine.anchoredPosition.x + GreenLine.anchoredPosition.x + GreenLine.sizeDelta.x / 2) / 5 + 50).ToString());
+            Debug.Log("Yellow zone: " + ((YellowLine.anchoredPosition.x - YellowLine.sizeDelta.x / 2) / 5 + 50).ToString() + " -- " + ((YellowLine.anchoredPosition.x + YellowLine.sizeDelta.x / 2) / 5 + 50).ToString());
+            Debug.Log("Progress -- " + (progress * 100).ToString());
             if ((YellowLine.anchoredPosition.x + GreenLine.anchoredPosition.x - GreenLine.sizeDelta.x / 2) / 5 + 50 < progress * 100 && progress * 100 < (YellowLine.anchoredPosition.x + GreenLine.anchoredPosition.x + GreenLine.sizeDelta.x / 2) / 5 + 50)
             {
                 pass++;
+                LineLog.text = "Press \"B\"\nLevel of Difficulty -- " + (pass + 1).ToString();
                 if (pass < 10)
                     ChangeLineSize(pass);
                 ChangeLinePosition();
                 Debug.Log("PASS!!!");
             }
-            else if ((YellowLine.anchoredPosition.x - GreenLine.sizeDelta.x / 2) / 5 + 50 < progress * 100 && progress * 100 < (YellowLine.anchoredPosition.x + GreenLine.sizeDelta.x / 2) / 5 + 50)
+            else if ((YellowLine.anchoredPosition.x - YellowLine.sizeDelta.x / 2) / 5 + 50 < progress * 100 && progress * 100 < (YellowLine.anchoredPosition.x + YellowLine.sizeDelta.x / 2) / 5 + 50)
             {
                 medium++;
                 ChangeLinePosition();
