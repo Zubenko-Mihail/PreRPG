@@ -271,14 +271,14 @@ public class Forge : MonoBehaviour
 
     void ChangeLinePosition()
     {
-        YellowLine.anchoredPosition = new Vector2(Random.Range(-RedLine_size / 2 + YellowLine.sizeDelta.x / 2, RedLine_size / 2 - YellowLine.sizeDelta.x / 2), 0);
+        YellowLine.anchoredPosition = new Vector2(Random.Range(-RedLine_size / 2 + YellowLine.sizeDelta.x / 2, RedLine_size / 2 - YellowLine.sizeDelta.x / 2), 0.8f);
         GreenLine.anchoredPosition = new Vector2(Random.Range(-YellowLine.sizeDelta.x / 2 + GreenLine.sizeDelta.x / 2, YellowLine.sizeDelta.x / 2 - GreenLine.sizeDelta.x / 2), 0);
     }
 
     void ChangeLineSize(int k)
     {
-        YellowLine.sizeDelta = new Vector2(5 * YellowLine_size[k], 50.0f);
-        GreenLine.sizeDelta = new Vector2(5 * GreenLine_size[k], 50.0f);
+        YellowLine.sizeDelta = new Vector2(5 * YellowLine_size[k], 40.0f);
+        GreenLine.sizeDelta = new Vector2(5 * GreenLine_size[k], 40.0f);
     }
 
     public void StopCraft()
